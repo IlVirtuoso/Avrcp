@@ -5,7 +5,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 add_subdirectory("netanalyst")
 find_package(networkit) 
-find_package(drogon) 
+find_package(Drogon) 
 find_package(ROOT)
 message(STATUS NETWORKIT: ${NETWORKIT_INCLUDE_DIR})
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})

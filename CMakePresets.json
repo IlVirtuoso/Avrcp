@@ -67,7 +67,13 @@
             "binaryDir": "${sourceDir}/out/build/${presetName}",
             "installDir": "${sourceDir}/out/install/${presetName}",
             "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
+                "CMAKE_BUILD_TYPE": "Debug",
+                "CMAKE_TOOLCHAIN_FILE":"/media/drfaust/FaustHDD/vcpkg/scripts/buildsystems/vcpkg.cmake",
+                "CMAKE_CXX_COMPILER":"g++",
+                "CMAKE_C_COMPILER":"gcc",
+                "ROOT_DIR":"/media/drfaust/FaustHDD/Libraries/root/cmake",
+                "drogon_DIR":"/media/drfaust/FaustHDD/vcpkg/installed/x64-linux/share/drogon"
+                
             },
             "condition": {
                 "type": "equals",

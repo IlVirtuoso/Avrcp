@@ -65,7 +65,7 @@ namespace NetAnalysis::GraphMeasures
 		return ComputeAlgorithmAsync<T>(algo);
 	}
 
-
+	
 
 
 }

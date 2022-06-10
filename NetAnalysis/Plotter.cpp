@@ -1,37 +1,44 @@
 #include "Plotter.hpp"
-#include <qbarseries.h>
-#include <qbarset.h>
 
-template<typename T>
-QLineSeries* FillSeries(const std::vector<T>& x, const std::vector<T>& y)
+
+
+
+
+NetAnalysis::Plotter::Plotter()
 {
-	static_assert(std::is_convertible<T, double>::value);
-	QLineSeries* lineSeries = new QLineSeries();
-	auto xItr = x.begin();
-	auto yItr = y.begin();
-	while (xItr != x.end() && yItr != y.end())
+	this->currentChart = new QChart();
+	this->currentView = new QChartView(currentChart);
+}
+
+
+void NetAnalysis::Plotter::Plot(std::vector<QAbstractSeries*> series)
+{
+	for (auto serie : series)
+		currentChart->addSeries(serie);
+}
+
+
+
+void NetAnalysis::Plotter::AddAxis(QAbstractAxis* axis, Qt::Alignment alignment)
+{
+	currentChart->addAxis(axis, alignment);
+}
+
+void NetAnalysis::Plotter::Reset()
+{
+}
+
+
+void NetAnalysis::Plotter::PlotHistogram(const std::vector<double>& values, int numBins)
+{
+	QBarSeries* serie = new QBarSeries();
+	QBarSet* barSet = new QBarSet("Values");
+	QList<double> qlist{};
+	for (auto value : values)
 	{
-		lineSeries->append(*xItr, *yItr);
+		qlist.append(value);
 	}
-	return lineSeries;
-}
-
-QChartView* NetAnalysis::Plotter::Plot(QLineSeries* series)
-{
-	QChart* lineChart = new QChart();
-	lineChart->addSeries(series);
-	QChartView* view = new QChartView(lineChart);
-	lineChart->show();
-	return view;
-}
-
-QChartView* NetAnalysis::Plotter::PlotHistogram()
-{
-
-}
-
-template<typename T>
-QChartView* NetAnalysis::Plotter::Plot(const std::vector<T>& x, const std::vector<T>& y)
-{
-	Plot(FillSeries(x, y));
+	barSet->append(qlist);
+	serie->append(barSet);
+	currentChart->addSeries(serie);
 }

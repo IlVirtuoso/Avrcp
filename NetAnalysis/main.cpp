@@ -8,7 +8,6 @@
 #include<drogon/drogon.h>
 
 
-const std::string basePath = "E:\\libs\\networkit\\input\\";
 
 
 
@@ -23,20 +22,25 @@ void StartQT(int argc, char * argv)
 }
 
 
-int main(int argc, char* argv)
+int main(int argc, char** argv)
 {
 	using namespace NetAnalysis::GraphMeasures;
-	QApplication* app = new QApplication(argc, &argv);
-	auto graph = EdgeListReader(',',0).read(basePath + "lastfm_asia_edges.csv");
-	auto dgtask = CalculateCentralityMeasureAsync<NetworKit::DegreeCentrality>(graph);
+	using namespace NetAnalysis;
+	std::string programPath{ argv[0] };
+	auto programFolder = programPath.substr(0, programPath.find_last_of('\\'));
+	std::string fileName{ "\\lastfm_asia_edges.csv" };
+	QApplication* app = new QApplication(argc, argv);
+	auto graph = EdgeListReader(',',0).read((programFolder + fileName).c_str());
+	auto analyzer = new GraphAnalyzer(graph);
+
+	auto dgtask = analyzer->CalculateCentralityMeasureAsync<NetworKit::DegreeCentrality>();
 	dgtask.wait();
 
 	auto dgt = dgtask.get();
-	QLineSeries* result = new QLineSeries();
-	graph.forNodes([&dgt, result](node v) {
-		result->append(v, dgt.score(v));
-		});
-	NetAnalysis::Plotter::Plot(result)->show();
+	Plotter* plotter = new Plotter();
+
+	plotter->PlotHistogram(dgt.scores(), 0);
+	((QChartView*)plotter->GetCurrentView())->show();
 	app->exec();
 	return 0;
 

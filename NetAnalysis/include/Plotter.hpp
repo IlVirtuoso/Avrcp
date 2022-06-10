@@ -2,13 +2,26 @@
 #include <QtCharts/qlineseries.h>
 #include <QtCharts/qchart.h>
 #include <QtCharts/qchartview.h>
-namespace NetAnalysis::Plotter
+#include <qgraphicsview.h>
+#include <qbarset.h>
+#include <qbarseries.h>
+namespace NetAnalysis
 {
 
-	template<typename T>
-	QChartView* Plot(const std::vector<T>& x,const std::vector<T>& y);
+	class Plotter
+	{
+	private:
+		QGraphicsView* currentView;
+		QChart* currentChart;
 
-	QChartView* Plot(QLineSeries* series);
+	public:
+		Plotter();
+		void Plot(std::vector<QAbstractSeries*> series);
+		void AddAxis(QAbstractAxis* axis, Qt::Alignment alignment);
+		void Reset();
+		const QGraphicsView* GetCurrentView() { return currentView; }
+		const QChart* GetChart() const { return currentChart; }
+		void PlotHistogram(const std::vector<double>& values, int numBins);
+	};
 
-	QChartView* PlotHistogram();
 }

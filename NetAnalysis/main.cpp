@@ -1,12 +1,10 @@
 #include "Analyzers.hpp"
 #include "Routines.hpp"
+#include "Plotter.hpp"
 #include <future>
 #include <networkit/io/EdgeListReader.hpp>
 #include <QApplication>
 #include <QMainWindow>
-#include <Plotter.hpp>
-#include<drogon/drogon.h>
-
 
 
 
@@ -25,7 +23,6 @@ void StartQT(int argc, char * argv)
 int main(int argc, char** argv)
 {
 	using namespace NetAnalysis::GraphMeasures;
-	using namespace NetAnalysis;
 	std::string programPath{ argv[0] };
 	auto programFolder = programPath.substr(0, programPath.find_last_of('\\'));
 	std::string fileName{ "\\lastfm_asia_edges.csv" };
@@ -33,14 +30,22 @@ int main(int argc, char** argv)
 	auto graph = EdgeListReader(',',0).read((programFolder + fileName).c_str());
 	auto analyzer = new GraphAnalyzer(graph);
 
+
+
 	auto dgtask = analyzer->CalculateCentralityMeasureAsync<NetworKit::DegreeCentrality>();
 	dgtask.wait();
 
 	auto dgt = dgtask.get();
-	Plotter* plotter = new Plotter();
 
-	plotter->PlotHistogram(dgt.scores(), 0);
-	((QChartView*)plotter->GetCurrentView())->show();
+	QVector<double> result{};
+	QVector<double> nodes{};
+
+	graph.forNodes([&result, &nodes,&dgt](node v) {
+		result.append(dgt.score(v));
+		nodes.append(v);
+		});
+
+	NetAnalysis::Plot(nodes, result);
 	app->exec();
 	return 0;
 

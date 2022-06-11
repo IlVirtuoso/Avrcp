@@ -1,5 +1,5 @@
 #pragma once
-#include "Analyzers.hpp"
+#include "GraphAnalyzer.hpp"
 #include <map>
 
 namespace NetAnalysis::Routines

@@ -34,6 +34,5 @@ namespace NetAnalysis
 		customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 		customPlot->graph(0)->setData(x, y);
 		customPlot->show();
-
 	}
 }

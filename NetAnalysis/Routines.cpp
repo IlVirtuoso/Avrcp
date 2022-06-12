@@ -19,7 +19,7 @@ namespace NetAnalysis::Routines
 		}
 		for (auto value : values)
 		{
-			int bin = std::floor((value / max) * numBins);
+			int bin = std::floor((value / max) * (numBins - 1));
 			bins[bin]->Count++;
 		}
 		return bins;

@@ -44,14 +44,16 @@ void AnalyzeGraph(std::string fileName)
 
 	QCustomPlot* barsPlot = new QCustomPlot();
 	QCPBars* bar = new QCPBars(barsPlot->xAxis, barsPlot->yAxis);
-	QVector<double> keys{};
-	QVector<double> values{};
-	graph.forNodes([&result, &nodes, &dgt, &keys,&values](node v) {
+	graph.forNodes([&result, &nodes, &dgt](node v) {
 		result.append(dgt.score(v));
 		nodes.append(v);
-
 		});
-	bar->addData(keys, values);
+	
+	for (auto val : discr)
+	{
+		bar->addData(val->Interval.first, val->Count);
+	}
+
 	barsPlot->show();
 	barsPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 

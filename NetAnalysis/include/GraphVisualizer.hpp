@@ -1,3 +1,4 @@
+#pragma once
 #include <networkit/graph/Graph.hpp>
 #include <ogdf/basic/Graph.h>
 #include <ogdf/fileformats/GraphIO.h>

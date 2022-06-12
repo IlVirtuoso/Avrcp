@@ -16,8 +16,7 @@ find_package(networkit)
 find_package(ogdf)
 message(STATUS NETWORKIT: ${NETWORKIT_INCLUDE_DIR})
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})
-set(OGDF_DLL False)
-add_executable(NetAnalysis main.cpp   "GraphAnalyzer.cpp"  "Routines.cpp"  "qcustomplot.cpp" "./include/qcustomplot.h" )
+add_executable(NetAnalysis main.cpp   "GraphAnalyzer.cpp"  "Routines.cpp" "qcustomplot.cpp" "./include/qcustomplot.h" )
 
 target_link_libraries(NetAnalysis PRIVATE ${NETWORKIT_LINK_DIR} 
 #Qt6::Core Qt6::Gui Qt6::Charts Qt6::Widgets ${ADDITIONAL_LIBRARIES}

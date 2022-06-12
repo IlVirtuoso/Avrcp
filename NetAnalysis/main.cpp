@@ -1,3 +1,4 @@
+#pragma once
 #include "GraphAnalyzer.hpp"
 #include "Routines.hpp"
 #include "GraphVisualizer.hpp"
@@ -38,6 +39,8 @@ int main(int argc, char** argv)
 	dgtask.wait();
 
 	auto dgt = dgtask.get();
+
+	auto discr = NetAnalysis::Routines::DiscretizeValues(dgt.scores(), 1000);
 
 	QVector<double> result{};
 	QVector<double> nodes{};

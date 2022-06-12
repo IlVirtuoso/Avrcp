@@ -21,7 +21,7 @@ add_executable(NetAnalysis main.cpp   "GraphAnalyzer.cpp"  "Routines.cpp" "qcust
 target_link_libraries(NetAnalysis PRIVATE ${NETWORKIT_LINK_DIR} 
 #Qt6::Core Qt6::Gui Qt6::Charts Qt6::Widgets ${ADDITIONAL_LIBRARIES}
 Qt5::Core Qt5::Gui Qt5::Charts Qt5::Widgets Qt5::PrintSupport ${ADDITIONAL_LIBRARIES}
-COIN OGDF
+COIN OGDF networkit
 )
 
 

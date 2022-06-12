@@ -8,7 +8,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <networkit/centrality/DegreeCentrality.hpp>
-
+#include <QFileDialog>
 
 
 
@@ -22,17 +22,12 @@ void StartQT(int argc, char * argv)
 
 }
 
-
-int main(int argc, char** argv)
+void AnalyzeGraph(std::string fileName)
 {
 	using namespace NetAnalysis::GraphMeasures;
-	std::string programPath{ argv[0] };
-	auto programFolder = programPath.substr(0, programPath.find_last_of('\\'));
-	std::string fileName{ "\\lastfm_asia_edges.csv" };
-	QApplication* app = new QApplication(argc, argv);
-	auto graph = EdgeListReader(',',0).read((programFolder + fileName).c_str());
-	auto analyzer = new GraphAnalyzer(graph);
+	Graph graph = EdgeListReader(',',(NetworKit::node)0).read(fileName);
 
+	auto analyzer = new GraphAnalyzer(graph);
 	auto converted = NetAnalysis::ConvertGraph(graph);
 
 	auto dgtask = analyzer->CalculateCentralityMeasureAsync<NetworKit::DegreeCentrality>();
@@ -40,7 +35,7 @@ int main(int argc, char** argv)
 
 	auto dgt = dgtask.get();
 
-	auto discr = NetAnalysis::Routines::DiscretizeValues(dgt.scores(), 1000);
+	auto discr = NetAnalysis::Routines::DiscretizeValues(dgt.scores(), 50);
 
 	QVector<double> result{};
 	QVector<double> nodes{};
@@ -61,6 +56,18 @@ int main(int argc, char** argv)
 	barsPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 
 	NetAnalysis::Plot(nodes, result);
+
+}
+
+
+
+int main(int argc, char** argv)
+{
+	QApplication* app = new QApplication(argc, argv);
+
+
+	auto fileName = QFileDialog::getOpenFileName();
+	AnalyzeGraph(fileName.toStdString());
 	app->exec();
 	return 0;
 }

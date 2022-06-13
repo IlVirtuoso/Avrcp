@@ -15,5 +15,7 @@ namespace NetAnalysis::Routines
 
 	std::vector<Bin*>& DiscretizeValues(const std::vector<double>& values, int spanInterval);
 
+
+
 }
 

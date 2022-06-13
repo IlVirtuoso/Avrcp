@@ -11,7 +11,6 @@
 #include <QFileDialog>
 
 
-
 void StartQT(int argc, char * argv)
 {
 	
@@ -39,7 +38,6 @@ void AnalyzeGraph(std::string fileName)
 
 	QVector<double> result{};
 	QVector<double> nodes{};
-
 
 
 	QCustomPlot* barsPlot = new QCustomPlot();

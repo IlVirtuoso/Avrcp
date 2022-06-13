@@ -9,7 +9,7 @@
 #include <QMainWindow>
 #include <networkit/centrality/DegreeCentrality.hpp>
 #include <QFileDialog>
-
+#include <graphviz/gvc.h>
 
 void StartQT(int argc, char * argv)
 {
@@ -27,12 +27,9 @@ void AnalyzeGraph(std::string fileName)
 	Graph graph = EdgeListReader(',',(NetworKit::node)0).read(fileName);
 
 	auto analyzer = new GraphAnalyzer(graph);
-	auto converted = NetAnalysis::ConvertGraph(graph);
-
-	NetAnalysis::EnergyLayout(converted, std::string{ "model.svg" });
 	auto dgtask = analyzer->CalculateCentralityMeasureAsync<NetworKit::DegreeCentrality>();
 	dgtask.wait();
-
+	gvContext();
 	auto dgt = dgtask.get();
 
 	auto discr = NetAnalysis::Routines::DiscretizeValues(dgt.scores(), 50);

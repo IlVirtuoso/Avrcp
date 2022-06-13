@@ -29,6 +29,7 @@ void AnalyzeGraph(std::string fileName)
 	auto analyzer = new GraphAnalyzer(graph);
 	auto converted = NetAnalysis::ConvertGraph(graph);
 
+	NetAnalysis::EnergyLayout(converted, std::string{ "model.svg" });
 	auto dgtask = analyzer->CalculateCentralityMeasureAsync<NetworKit::DegreeCentrality>();
 	dgtask.wait();
 

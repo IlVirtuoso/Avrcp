@@ -4,11 +4,14 @@
 #include <networkit/distance/STSP.hpp>
 #include <networkit/distance/SSSP.hpp>
 #include <networkit/community/CommunityDetectionAlgorithm.hpp>
+#include <networkit/io/EdgeListReader.hpp>
 #include <future>
 #include <iostream>
 
 namespace NetAnalysis::GraphMeasures
 {
+
+
 	using namespace NetworKit;
 	
 	template<typename T>
@@ -33,8 +36,15 @@ namespace NetAnalysis::GraphMeasures
 	public:
 
 
-		GraphAnalyzer(Graph & g): graph{g}{}
+		GraphAnalyzer() : graph{*new NetworKit::Graph()}
+		{
 
+		}
+
+		void LoadGraph(std::string fileName)
+		{
+			this->graph = EdgeListReader(',', (NetworKit::node)0).read(fileName);
+		}
 
 		template<class T>
 		Task<T> CalculateCentralityMeasureAsync()
@@ -70,12 +80,11 @@ namespace NetAnalysis::GraphMeasures
 		}
 
 
+
+		const Graph& GetGraph() const { return this->graph; }
+		void SetGraph(Graph& graph) { this->graph = graph; }
+
 	};
 
-
-
-
-	
-	
 	
 }

@@ -8,6 +8,7 @@
 #include <QApplication>
 #include <QMainWindow>
 #include <networkit/centrality/DegreeCentrality.hpp>
+#include <networkit/io/DotGraphWriter.hpp>
 #include <QFileDialog>
 #include <graphviz/gvc.h>
 
@@ -21,6 +22,37 @@ void StartQT(int argc, char * argv)
 
 }
 
+
+
+void DrawGraph(Agraph_t* g,GVC_t * context)
+{
+
+	gvRender(context, g, "svg", stdout);
+}
+
+void PlotGraph(NetworKit::Graph & graph)
+{
+	NetworKit::DotGraphWriter().write(graph, "graph.dot");
+	std::ifstream* stream = new std::ifstream();
+	stream->open("graph.dot");
+	char* str = new char[1024];
+	std::string result = "";
+	while (stream->readsome(str, 1024) != 0)
+	{
+		result += str;
+		str = new char[1024];
+	}
+	Agraph_t* G;
+	GVC_t* gvc;
+	gvc = gvContext(); /* library function */
+	G = agmemread(result.c_str());
+	gvLayout(gvc, G,"dot"); /* library function */
+	DrawGraph(G,gvc);
+	gvFreeLayout(gvc, G); /* library function */
+	agclose(G); /* library function */
+	gvFreeContext(gvc);
+}
+
 void AnalyzeGraph(std::string fileName)
 {
 	using namespace NetAnalysis::GraphMeasures;
@@ -29,7 +61,7 @@ void AnalyzeGraph(std::string fileName)
 	auto analyzer = new GraphAnalyzer(graph);
 	auto dgtask = analyzer->CalculateCentralityMeasureAsync<NetworKit::DegreeCentrality>();
 	dgtask.wait();
-	gvContext();
+	PlotGraph(graph);
 	auto dgt = dgtask.get();
 
 	auto discr = NetAnalysis::Routines::DiscretizeValues(dgt.scores(), 50);

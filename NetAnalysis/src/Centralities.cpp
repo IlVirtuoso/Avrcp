@@ -16,7 +16,7 @@ namespace NetAnalysis::Routines
 			});
 
 		NetAnalysis::Plot(nodes, values);
-		NetAnalysis::PlotCountHistogram(values, 100);
+		NetAnalysis::PlotCountHistogram(values, 10);
 	}
 
 	void PlotDegreeCentrality(GraphAnalyzer* analyzer)
@@ -29,8 +29,8 @@ namespace NetAnalysis::Routines
 			nodes.push_back(v);
 			});
 
-		NetAnalysis::Plot(nodes, values);
-		NetAnalysis::PlotCountHistogram(values, 100);
+		NetAnalysis::Plot(nodes, values)->show();
+		NetAnalysis::PlotCountHistogram(values, 100,30)->show();
 	}
 
 }

@@ -13,21 +13,21 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
 find_package(networkit) 
-find_package(ogdf)
+FIND_PACKAGE(Boost 1.79 REQUIRED)
+find_package(Qt5 COMPONENTS Core Gui Charts Widgets PrintSupport DataVisualization)
 message(STATUS NETWORKIT: ${NETWORKIT_INCLUDE_DIR})
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})
 add_executable(NetAnalysis  "./src/main.cpp" "./src/Centralities.cpp"  "./src/GraphAnalyzer.cpp" "./src/Plotter.cpp" "./include/qcustomplot.h" "./src/qcustomplot.cpp" "src/Communities.cpp")
 
 target_link_libraries(NetAnalysis PRIVATE ${NETWORKIT_LINK_DIR} 
 #Qt6::Core Qt6::Gui Qt6::Charts Qt6::Widgets ${ADDITIONAL_LIBRARIES}
-Qt5::Core Qt5::Gui Qt5::Charts Qt5::Widgets Qt5::PrintSupport ${ADDITIONAL_LIBRARIES}
-COIN OGDF networkit
+Qt5::Core Qt5::Gui Qt5::Charts Qt5::Widgets Qt5::PrintSupport Qt5::DataVisualization ${ADDITIONAL_LIBRARIES} networkit ${Boost_LIBRARIES} 
 )
 
 
-target_include_directories(NetAnalysis PUBLIC ./include ${NETWORKIT_INCLUDE_DIR} )
+target_include_directories(NetAnalysis PUBLIC ./include ${NETWORKIT_INCLUDE_DIR} ${Boost_INCLUDE_DIR} )
 if(WIN32)
 add_custom_command(TARGET NetAnalysis
 COMMAND windeployqt ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/NetAnalysis.exe)
 endif()
-configure_file(input/lastfm_asia_edges.csv ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/lastfm_asia_edges.csv COPYONLY)
+configure_file(doc/musae_git_edges.csv ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/lastfm_asia_edges.csv COPYONLY)

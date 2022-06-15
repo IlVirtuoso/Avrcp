@@ -1,14 +1,15 @@
 #include "Plotter.hpp"
-
+#include <QtDataVisualization>
 namespace NetAnalysis
 {
-	void Plot(std::vector<double> x, std::vector<double> y)
+	QCustomPlot* Plot(std::vector<double> x, std::vector<double> y)
 	{
 		QVector<double> x1(x.begin(), x.end());
 		QVector<double> y1(y.begin(), y.end());
+		return Plot(x1, y1);
 	}
 
-	void Plot(QVector<double> x, QVector<double> y)
+	QCustomPlot* Plot(QVector<double> x, QVector<double> y)
 	{
 		QCustomPlot* customPlot = new QCustomPlot();
 
@@ -37,13 +38,13 @@ namespace NetAnalysis
 		// Allow user to drag axis ranges with mouse, zoom with mouse wheel and select graphs by clicking:
 		customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
 		customPlot->graph(0)->setData(x, y);
-		customPlot->show();
+		return customPlot;
 	}
 
 	
 
 
-	std::vector<Bin*>& DiscretizeValues(const std::vector<double>& values, int spanInterval)
+	/*std::vector<Bin*>& DiscretizeValues(const std::vector<double>& values, int spanInterval)
 	{
 		auto max = *std::max_element(values.begin(), values.end());
 		auto min = *std::min_element(values.begin(), values.end());
@@ -63,20 +64,53 @@ namespace NetAnalysis
 		}
 		return bins;
 
+	}*/
+
+
+	std::vector<std::pair<boost::icl::continuous_interval<double>,int>> CountValues(std::vector<double>& values, int numBins, double precisionInterval)
+	{
+		using namespace boost::icl;
+		auto max = *std::max_element(values.begin(), values.end());
+		auto min = *std::min_element(values.begin(), values.end());
+		double span = std::ceil((max - min) / numBins);
+		interval_map<double, int> lookup{};
+		auto start = min;
+		auto result = *new std::vector<std::pair<boost::icl::continuous_interval<double>, int>>();
+		for (int i = 0 ; i < numBins; i++)
+		{
+			auto interval = continuous_interval<double>(start, start + span);
+			result.push_back(std::pair(interval,0));
+			lookup.insert(std::pair(interval, i));
+			start += span + precisionInterval;
+		}
+		for (double value : values)
+		{
+			int i = lookup(value);
+			result[i].second++;
+		}
+		return result;
 	}
 
-	void PlotCountHistogram(std::vector<double> values, double BinDimension)
+	QCustomPlot* PlotCountHistogram(std::vector<double> values, int NumBins, int paddings)
 	{
 		QCustomPlot* barsPlot = new QCustomPlot();
 		QCPBars* bar = new QCPBars(barsPlot->xAxis, barsPlot->yAxis);
-		auto discr = DiscretizeValues(values, BinDimension);
-		for (auto val : discr)
+		QLabel label{ "ciao" };
+		QVector<QString> labels{};
+		QVector<double> ticks;
+		auto counters = CountValues(values, NumBins);
+		for (int i = 0 ; i < counters.size(); i++)
 		{
-			bar->addData(std::floor((val->Interval.second - val->Interval.first) / 2 + val->Interval.first), val->Count);
+			bar->addData(i + 1, counters.at(i).second);
+			labels << (std::to_string((int)counters.at(i).first.lower()) + "-" + std::to_string((int)counters.at(i).first.upper())).c_str();
+			ticks << i + 1;
 		}
-		bar->setWidth(BinDimension);
+		QSharedPointer<QCPAxisTickerText> textTicker{new QCPAxisTickerText()};
+		textTicker->addTicks(ticks, labels);
+		barsPlot->xAxis->setTicker(textTicker);
+		barsPlot->yAxis->setPadding(paddings);
 		bar->rescaleAxes();
-		barsPlot->show();
 		barsPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
+		return barsPlot;
 	}
 }

@@ -10,7 +10,6 @@
 #include <networkit/centrality/DegreeCentrality.hpp>
 #include <QFileDialog>
 
-
 void StartQT(int argc, char * argv)
 {
 	
@@ -28,12 +27,12 @@ int main(int argc, char** argv)
 {
 	QApplication* app = new QApplication(argc, argv);
 
-
+	
 	auto fileName = QFileDialog::getOpenFileName();
 	auto analyzer = new NetAnalysis::GraphMeasures::GraphAnalyzer();
 	analyzer->LoadGraph(fileName.toStdString());
 	NetAnalysis::Routines::PlotDegreeCentrality(analyzer);
-	NetAnalysis::Routines::PlotBetweenness(analyzer);
+	//NetAnalysis::Routines::PlotBetweenness(analyzer);
 	app->exec();
 	return 0;
 }

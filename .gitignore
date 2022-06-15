@@ -397,3 +397,9 @@ build/NetAnalysis/NetAnalysis_autogen/timestamp
 build/NetAnalysis/NetAnalysis_autogen/6YEA5652QU/moc_qcustomplot.cpp
 build/NetAnalysis/NetAnalysis_autogen/6YEA5652QU/moc_qcustomplot.cpp.d
 CMakePresets.json
+NetAnalysis/doc/tech_report.synctex.gz
+NetAnalysis/doc/tech_report.pdf
+NetAnalysis/doc/tech_report.fls
+NetAnalysis/doc/tech_report.fdb_latexmk
+NetAnalysis/doc/tech_report.aux
+NetAnalysis/doc/tech_report.spl

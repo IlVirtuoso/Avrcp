@@ -37,7 +37,7 @@ Qt5::Core Qt5::Gui Qt5::Charts Qt5::Widgets Qt5::PrintSupport Qt5::DataVisualiza
 )
 
 
-target_include_directories(NetAnalysis PRIVATE include ${NETWORKIT_INCLUDE_DIR} ${Boost_INCLUDE_DIR} )
+target_include_directories(NetAnalysis PRIVATE include ${NETWORKIT_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${NODE_INCLUDE_DIR} )
 if(WIN32)
 add_custom_command(TARGET NetAnalysis
 COMMAND windeployqt ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/NetAnalysis.exe)

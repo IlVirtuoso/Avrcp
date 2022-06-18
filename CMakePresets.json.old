@@ -1,0 +1,36 @@
+{
+    "version": 3,
+    "buildPresets": [
+        {
+            "name": "windows-debug",
+            "displayName": "Visual Studio Community 2022 Preview - amd64 - Debug",
+            "configurePreset": "windows",
+            "configuration": "Debug"
+        }
+    ],
+    "configurePresets": [
+        {
+            "name": "windows",
+            "displayName": "Visual Studio Community 2022 Preview - amd64",
+            "description": "Using compilers for Visual Studio 17 2022 (x64 architecture)",
+            "generator": "Visual Studio 17 2022",
+            "toolset": "host=x64",
+            "architecture": "x64",
+            "binaryDir": "${sourceDir}/out/build/${presetName}",
+            "cacheVariables": {
+                "CMAKE_INSTALL_PREFIX": "${sourceDir}/out/install/${presetName}",
+                "CMAKE_C_COMPILER": "cl.exe",
+                "CMAKE_CXX_COMPILER": "cl.exe",
+                "networkit_DIR":"E:/libs/networkit/out/install/x64-Debug/",
+                "Qt5_DIR":"E:\\Qt\\5.15.2\\msvc2019_64\\lib\\cmake\\Qt5",
+                "OGDF_DIR":"E:/libs/ogdf/out/install/x64-Release/lib",
+                "ogdf_DIR":"E:/libs/ogdf/out/install/x64-Release/",
+                "OGDF_DLL":"False",
+                "GRAPHVIZ_DIR":"C:/Program Files/Graphviz",
+                "Boost_DIR":"E:\\libs\\boost_1_79_0",
+                "Boost_INCLUDE_DIR":"E:\\libs\\boost_1_79_0",
+                "CMAKE_TOOLCHAIN_FILE": "E:/vcpkg/scripts/buildsystems/vcpkg.cmake"
+            }
+        }
+    ]
+}

@@ -3,7 +3,10 @@
 #include <networkit/io/DotGraphWriter.hpp>
 namespace NetAnalysis
 {
+	void PlotGraph(const NetworKit::Partition& partition, const NetworKit::Graph& graph)
+	{
 
+	}
 
 	void DrawGraph(Agraph_t* g, GVC_t* context)
 	{

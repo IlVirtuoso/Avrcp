@@ -56,11 +56,12 @@ namespace NetAnalysis::GraphMeasures
 		}
 
 		template<class T>
-		Task<T> ExecuteCommunityDetectionAlgorithm()
+		T ExecuteCommunityDetectionAlgorithm()
 		{
 			static_assert(std::is_convertible<T*, NetworKit::CommunityDetectionAlgorithm*>::value);
-			CommunityDetectionAlgorithm* algo = new T{ graph };
-			return ComputeAlgorithmAsync<T>(algo);
+			T algo(graph);
+			algo.run();
+			return algo;
 		}
 
 		template<class T>

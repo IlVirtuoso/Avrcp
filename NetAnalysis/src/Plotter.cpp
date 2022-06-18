@@ -2,43 +2,20 @@
 #include <QtDataVisualization>
 namespace NetAnalysis
 {
-	QCustomPlot* Plot(std::vector<double> x, std::vector<double> y)
+	QCPGraph* Plot(std::vector<double> x, std::vector<double> y, QCustomPlot * plot, QColor lineColor)
 	{
 		QVector<double> x1(x.begin(), x.end());
 		QVector<double> y1(y.begin(), y.end());
-		return Plot(x1, y1);
+		return Plot(x1, y1,plot,lineColor);
 	}
 
-	QCustomPlot* Plot(QVector<double> x, QVector<double> y)
+	QCPGraph* Plot(QVector<double> x, QVector<double> y, QCustomPlot* customPlot,QColor lineColor)
 	{
-		QCustomPlot* customPlot = new QCustomPlot();
 
-		customPlot->addGraph();
-		customPlot->graph(0)->setPen(QPen(Qt::blue)); // line color blue for first graph
-		customPlot->graph(0)->setBrush(QBrush(QColor(0, 0, 255, 20))); // first graph will be filled with translucent blue
-		customPlot->addGraph();
-		customPlot->graph(1)->setPen(QPen(Qt::red)); // line color red for second graph
-		// generate some points of data (y0 for first, y1 for second graph):
-		// configure right and top axis to show ticks but no labels:
-		// (see QCPAxisRect::setupFullAxesBox for a quicker method to do this)
-		customPlot->xAxis2->setVisible(true);
-		customPlot->xAxis2->setTickLabels(false);
-		customPlot->yAxis2->setVisible(true);
-		customPlot->yAxis2->setTickLabels(false);
-		// make left and bottom axes always transfer their ranges to right and top axes:
-		QObject::connect(customPlot->xAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->xAxis2, SLOT(setRange(QCPRange)));
-		QObject::connect(customPlot->yAxis, SIGNAL(rangeChanged(QCPRange)), customPlot->yAxis2, SLOT(setRange(QCPRange)));
-		// pass data points to graphs:
-
-		// let the ranges scale themselves so graph 0 fits perfectly in the visible area:
-		customPlot->graph(0)->rescaleAxes();
-		// same thing for graph 1, but only enlarge ranges (in case graph 1 is smaller than graph 0):
-		customPlot->graph(1)->rescaleAxes(true);
-		// Note: we could have also just called customPlot->rescaleAxes(); instead
-		// Allow user to drag axis ranges with mouse, zoom with mouse wheel and select graphs by clicking:
-		customPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
-		customPlot->graph(0)->setData(x, y);
-		return customPlot;
+		auto result = customPlot->addGraph();
+		result->setData(x, y);
+		result->setPen(QPen(lineColor));
+		return result;
 	}
 
 	
@@ -91,26 +68,39 @@ namespace NetAnalysis
 		return result;
 	}
 
-	QCustomPlot* PlotCountHistogram(std::vector<double> values, int NumBins, int paddings)
+	QCPBars* PlotCountHistogram(std::vector<double> values, int NumBins, QCustomPlot* plot, int padding, bool normalized, QColor barsColor)
 	{
-		QCustomPlot* barsPlot = new QCustomPlot();
-		QCPBars* bar = new QCPBars(barsPlot->xAxis, barsPlot->yAxis);
-		QLabel label{ "ciao" };
+		QCPBars* bar = new QCPBars(plot->xAxis, plot->yAxis);
 		QVector<QString> labels{};
 		QVector<double> ticks;
 		auto counters = CountValues(values, NumBins);
+		double sum = 1;
+		if (normalized)
+		{
+			sum = 0;
+			for (const auto& value: counters) sum += value.second;
+		}
 		for (int i = 0 ; i < counters.size(); i++)
 		{
-			bar->addData(i + 1, counters.at(i).second);
+			bar->addData(i + 1, counters.at(i).second/sum);
 			labels << (std::to_string((int)counters.at(i).first.lower()) + "-" + std::to_string((int)counters.at(i).first.upper())).c_str();
 			ticks << i + 1;
 		}
 		QSharedPointer<QCPAxisTickerText> textTicker{new QCPAxisTickerText()};
 		textTicker->addTicks(ticks, labels);
-		barsPlot->xAxis->setTicker(textTicker);
-		barsPlot->yAxis->setPadding(paddings);
+		plot->xAxis->setTicker(textTicker);
+		plot->yAxis->setPadding(padding);
+		bar->setBrush(barsColor);
 		bar->rescaleAxes();
-		barsPlot->setInteractions(QCP::iRangeDrag | QCP::iRangeZoom | QCP::iSelectPlottables);
-		return barsPlot;
+		return bar;
+	}
+
+	QCustomPlot* GeneratePlot(QColor background, QColor axisColor)
+	{
+		QCustomPlot* plot = new QCustomPlot();
+		plot->setBackground(background);
+		plot->xAxis->setTickLabelColor(axisColor);
+		plot->yAxis->setTickLabelColor(axisColor);
+		return plot;
 	}
 }

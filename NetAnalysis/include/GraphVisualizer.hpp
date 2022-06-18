@@ -1,5 +1,8 @@
 #pragma once
+#ifndef GRAPHVISUALYZER_H
+#define GRAPHVISUALYZER_H
 #include <networkit/io/DotPartitionWriter.hpp>
+#include <networkit/io/DotGraphWriter.hpp>
 #include <boost/iostreams/stream_buffer.hpp>
 #include <boost/iostreams/write.hpp>
 #include <boost/iostreams/read.hpp>
@@ -9,11 +12,40 @@
 namespace NetAnalysis
 {
 
+	void PlotGraph(const NetworKit::Partition& partition, const NetworKit::Graph& graph)
+	{
 
-	void DrawGraph(Agraph_t* g, GVC_t* context);
-	void PlotGraph(NetworKit::Graph& graph);
+	}
 
-	void PlotGraph(const NetworKit::Partition& partition, const NetworKit::Graph& graph);
+	void DrawGraph(Agraph_t* g, GVC_t* context)
+	{
+
+		gvRender(context, g, "svg", stdout);
+	}
+
+	void PlotGraph(NetworKit::Graph& graph)
+	{
+		NetworKit::DotGraphWriter().write(graph, "graph.dot");
+		std::ifstream* stream = new std::ifstream();
+		stream->open("graph.dot");
+		char* str = new char[1024];
+		std::string result = "";
+		while (stream->readsome(str, 1024) != 0)
+		{
+			result += str;
+			str = new char[1024];
+		}
+		Agraph_t* G;
+		GVC_t* gvc;
+		gvc = gvContext(); /* library function */
+		G = agmemread(result.c_str());
+		gvLayout(gvc, G, "dot"); /* library function */
+		DrawGraph(G, gvc);
+		gvFreeLayout(gvc, G); /* library function */
+		agclose(G); /* library function */
+		gvFreeContext(gvc);
+	}
 
 
 }
+#endif

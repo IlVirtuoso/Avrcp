@@ -1,4 +1,6 @@
 #pragma once
+#ifndef COMMUNITIES_HPP
+#define COMMUNITIES_HPP
 #include "GraphVisualizer.hpp"
 #include "Plotter.hpp"
 #include <networkit/community/PLM.hpp>
@@ -83,3 +85,5 @@ namespace NetAnalysis::Routines
 	}
 
 }
+
+#endif

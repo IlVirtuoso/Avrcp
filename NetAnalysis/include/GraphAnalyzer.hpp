@@ -1,4 +1,8 @@
 #pragma once
+#ifndef GRAPHANALYZER_H
+#define GRAPHANALYZER_H
+
+
 #include <networkit/graph/Graph.hpp>
 #include <networkit/centrality/Centrality.hpp>
 #include <networkit/distance/STSP.hpp>
@@ -13,7 +17,7 @@ namespace NetAnalysis::GraphMeasures
 
 
 	using namespace NetworKit;
-	
+
 	template<typename T>
 	using Task = std::future<T>;
 
@@ -36,7 +40,7 @@ namespace NetAnalysis::GraphMeasures
 	public:
 
 
-		GraphAnalyzer() : graph{*new NetworKit::Graph()}
+		GraphAnalyzer() : graph{ *new NetworKit::Graph() }
 		{
 
 		}
@@ -87,5 +91,9 @@ namespace NetAnalysis::GraphMeasures
 
 	};
 
-	
+
 }
+
+
+
+#endif // !GRAPHANALYZER_H

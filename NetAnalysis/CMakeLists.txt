@@ -17,7 +17,7 @@ FIND_PACKAGE(Boost 1.79 REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Charts Widgets PrintSupport DataVisualization)
 message(STATUS NETWORKIT: ${NETWORKIT_INCLUDE_DIR})
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})
-add_executable(NetAnalysis  "./src/main.cpp" "./src/Centralities.cpp"  "./src/GraphAnalyzer.cpp" "./src/Plotter.cpp" "./include/qcustomplot.h" "./src/qcustomplot.cpp" "src/Communities.cpp" "src/GraphVisualizer.cpp")
+add_executable(NetAnalysis  "./src/main.cpp" "./src/Plotter.cpp" "./include/qcustomplot.h" "./src/qcustomplot.cpp"  )
 
 if(WIN32)
 set(GRAPHVIZ_DIR "" CACHE PATH "")

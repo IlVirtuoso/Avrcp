@@ -1,4 +1,7 @@
 #pragma once
+#ifndef CENTRALITIES_HPP
+#define CENTRALITIES_HPP
+
 #include <map>
 #include <vector>
 #include <cmath>
@@ -11,7 +14,27 @@ namespace NetAnalysis::Routines
 	using namespace NetAnalysis::GraphMeasures;
 	//void PlotCentralityMeasures(NetworKit::Graph& graph);
 
-	void PlotBetweenness(GraphAnalyzer * analyzer);
-	void PlotDegreeCentrality(GraphAnalyzer* analyzer);
+
+	template<typename T>
+	void ShowCentralityResults()
+	{
+
+		static_assert(std::is_convertible<T&, NetworKit::Centrality&>::value);
+		std::string name(typeid(T).name());
+
+		std::cout << name << std::endl;
+
+
+	}
+
+	void AnalyzeCentrality(GraphAnalyzer* analyzer)
+	{
+		ShowCentralityResults<Betweenness>();
+	}
+	
 }
+
+
+
+#endif // !CENTRALITIES_HPP
 

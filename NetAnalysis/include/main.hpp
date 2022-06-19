@@ -2,6 +2,7 @@
 #include "GraphAnalyzer.hpp"
 #include "Centralities.hpp"
 #include "Communities.hpp"	
+#include "Components.hpp"
 #include "Plotter.hpp"
 #include <future>
 #include <filesystem>

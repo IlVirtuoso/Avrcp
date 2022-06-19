@@ -1,19 +1,11 @@
 #include "main.hpp"
 
-void StartQT(int argc, char * argv)
-{
-	
-	QMainWindow* mainwindow = new QMainWindow();
 
-	mainwindow->show();
-	
+void StartQT(int argc, char ** argv)
+{
+
 
 }
-
-
-
-
-
 
 
 
@@ -23,15 +15,10 @@ int main(int argc, char** argv)
 	auto fileName = QFileDialog::getOpenFileName();
 	auto analyzer = new NetAnalysis::GraphMeasures::GraphAnalyzer();
 	analyzer->LoadGraph(fileName.toStdString());
+	//NetAnalysis::Routines::ExecuteCommunityAnalysis(analyzer);
 	NetAnalysis::Routines::AnalyzeCentrality(analyzer);
 
-	
-	app->exec();
-	return 0;
+
+	return app->exec();
+
 }
-
-
-
-
-
-

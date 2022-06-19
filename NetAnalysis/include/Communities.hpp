@@ -54,7 +54,7 @@ namespace NetAnalysis::Routines
 		QCustomPlot* histogram = GeneratePlot();
 		QCustomPlot* chart = GeneratePlot();
 		histogram->setWindowTitle("Histogram: Size of cluster frequency");
-		auto histg = PlotCountHistogram(values, 10, histogram, 5, true, Qt::GlobalColor::red);
+		auto histg = PlotCountHistogram(values, 10, histogram, true, Qt::GlobalColor::red);
 		histogram->setInteractions(QCP::Interaction::iSelectPlottables);
 		histogram->xAxis->scaleRange(2.0);
 		histogram->yAxis->scaleRange(1.5);

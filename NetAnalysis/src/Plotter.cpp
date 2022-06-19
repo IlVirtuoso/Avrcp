@@ -68,7 +68,7 @@ namespace NetAnalysis
 		return result;
 	}
 
-	QCPBars* PlotCountHistogram(std::vector<double> values, int NumBins, QCustomPlot* plot, int padding, bool normalized, QColor barsColor)
+	QCPBars* PlotCountHistogram(std::vector<double> values, int NumBins, QCustomPlot* plot, bool normalized, QColor barsColor)
 	{
 		QCPBars* bar = new QCPBars(plot->xAxis, plot->yAxis);
 		QVector<QString> labels{};
@@ -80,16 +80,14 @@ namespace NetAnalysis
 			sum = 0;
 			for (const auto& value: counters) sum += value.second;
 		}
-		for (int i = 0 ; i < counters.size(); i++)
-		{
-			bar->addData(i + 1, counters.at(i).second/sum);
-			labels << (std::to_string((int)counters.at(i).first.lower()) + "-" + std::to_string((int)counters.at(i).first.upper())).c_str();
-			ticks << i + 1;
-		}
-		QSharedPointer<QCPAxisTickerText> textTicker{new QCPAxisTickerText()};
-		textTicker->addTicks(ticks, labels);
-		plot->xAxis->setTicker(textTicker);
-		plot->yAxis->setPadding(padding);
+
+		double max = *std::max_element(values.begin(), values.end());
+		
+
+
+		for (auto& counter : counters)
+			bar->addData(counter.first.upper(), counter.second/sum);
+		bar->setWidth(counters.at(1).first.upper() - counters.at(0).first.upper());
 		bar->setBrush(barsColor);
 		bar->rescaleAxes();
 		return bar;

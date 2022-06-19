@@ -7,6 +7,7 @@
 #include <networkit/centrality/Centrality.hpp>
 #include <networkit/distance/STSP.hpp>
 #include <networkit/distance/SSSP.hpp>
+#include <networkit/components/ComponentDecomposition.hpp>
 #include <networkit/community/CommunityDetectionAlgorithm.hpp>
 #include <networkit/io/EdgeListReader.hpp>
 #include <future>
@@ -84,6 +85,13 @@ namespace NetAnalysis::GraphMeasures
 			return ComputeAlgorithmAsync<T>(algo);
 		}
 
+		template<class T>
+		Task<T> ComputeComponentsDecomposition()
+		{
+			static_assert(std::is_convertible<T*, NetworKit::ComponentDecomposition*>::value);
+			ComponentDecomposition* algo = new T{ graph };
+			return ComputeAlgorithmAsync<T>(algo);
+		}
 
 
 		const Graph& GetGraph() const { return this->graph; }

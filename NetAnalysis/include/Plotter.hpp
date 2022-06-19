@@ -20,7 +20,7 @@ namespace NetAnalysis
 	QCPGraph* Plot(QVector<double> x, QVector<double> y, QCustomPlot* plot, QColor lineColor);
 	//std::vector<Bin*>& DiscretizeValues(const std::vector<double>& values, int spanInterval);
 	std::vector<std::pair<boost::icl::continuous_interval<double>, int>> CountValues(std::vector<double>& values, int numBins, double precisionInterval = 1.0);
-	QCPBars* PlotCountHistogram(std::vector<double> values, int NumBins, QCustomPlot* plot, int padding = 5, bool normalized = false, QColor barsColor = Qt::GlobalColor::blue);
+	QCPBars* PlotCountHistogram(std::vector<double> values, int NumBins, QCustomPlot* plot,  bool normalized = false, QColor barsColor = Qt::GlobalColor::blue);
 
 }
 #endif // !PLOTTER_HPP

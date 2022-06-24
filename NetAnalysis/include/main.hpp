@@ -12,5 +12,4 @@
 #include <networkit/centrality/DegreeCentrality.hpp>
 #include <networkit/io/DotGraphWriter.hpp>
 #include <QFileDialog>
-#include <graphviz/gvc.h>
 #include <networkit/community/PLM.hpp>

@@ -5,14 +5,18 @@
 #include <map>
 #include <vector>
 #include <cmath>
+#include <iostream>
 #include "GraphAnalyzer.hpp"
 #include <networkit/centrality/LocalClusteringCoefficient.hpp>
 #include <networkit/centrality/Betweenness.hpp>
 #include <networkit/centrality/Closeness.hpp>
 #include <networkit/centrality/DegreeCentrality.hpp>
+#include <networkit/distance/Dijkstra.hpp>
 #include <boost/accumulators/accumulators.hpp>
+#include <boost/container/vector.hpp>
 #include <boost/accumulators/framework/accumulator_set.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
+#include <boost/container/map.hpp>
 #include <boost/accumulators/statistics/max.hpp>
 #include <boost/accumulators/statistics/min.hpp>
 #include <boost/accumulators/statistics/mean.hpp>
@@ -69,6 +73,20 @@ namespace NetAnalysis::Routines
 
 		Betweenness btw = btwTask.get();
 		ShowCentralityResults(btw);
+
+
+	}
+
+	void AveragePathLength(GraphAnalyzer * analyzer)
+	{
+		using namespace boost;
+		container::map<double, std::vector<double>> distanceMap{};
+		int numNodes = analyzer->GetGraph().numberOfNodes();
+		analyzer->GetGraph().forNodes([analyzer, &distanceMap](node v)
+			{
+				auto algo = analyzer->ComputeGraphDistance<Dijkstra>(v).get();
+				distanceMap[v] = algo.getDistances();
+			});
 
 
 	}

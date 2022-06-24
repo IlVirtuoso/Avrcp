@@ -16,8 +16,8 @@ int main(int argc, char** argv)
 	auto analyzer = new NetAnalysis::GraphMeasures::GraphAnalyzer();
 	analyzer->LoadGraph(fileName.toStdString());
 	//NetAnalysis::Routines::ExecuteCommunityAnalysis(analyzer);
-	NetAnalysis::Routines::AnalyzeCentrality(analyzer);
-
+	//NetAnalysis::Routines::AnalyzeCentrality(analyzer);
+	NetAnalysis::Routines::AveragePathLength(analyzer);
 
 	return app->exec();
 

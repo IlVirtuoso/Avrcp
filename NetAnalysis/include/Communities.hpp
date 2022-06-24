@@ -1,11 +1,11 @@
 #pragma once
 #ifndef COMMUNITIES_HPP
 #define COMMUNITIES_HPP
-#include "GraphVisualizer.hpp"
 #include "Plotter.hpp"
 #include <networkit/community/PLM.hpp>
 #include <networkit/community/PLP.hpp>
 #include <filesystem>
+#include <iostream>
 #include <networkit/community/Modularity.hpp>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/array.hpp>
@@ -81,7 +81,6 @@ namespace NetAnalysis::Routines
 		auto labelProp = analyzer->ExecuteCommunityDetectionAlgorithm<NetworKit::PLP>();
 		NetAnalysis::Routines::ShowCommunityAlgorithmData(labelProp, analyzer->GetGraph(), "./charts/PLP");
 
-		PlotGraph(comm.getPartition(), analyzer->GetGraph());
 	}
 
 }

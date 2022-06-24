@@ -15,9 +15,11 @@ set(CMAKE_AUTOUIC ON)
 find_package(networkit) 
 FIND_PACKAGE(Boost REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Charts Widgets PrintSupport DataVisualization)
+find_package(Matplot++ REQUIRED)
+find_package(sciplot REQUIRED)
 message(STATUS NETWORKIT: ${NETWORKIT_INCLUDE_DIR})
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})
-add_executable(NetAnalysis  "./src/main.cpp" "./src/Plotter.cpp" "./include/qcustomplot.h" "./src/qcustomplot.cpp"    )
+add_executable(NetAnalysis  "./src/main.cpp" "./src/Plotter.cpp"  "src/Centralities.cpp" "src/Communities.cpp")
 
 if(WIN32)
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})
@@ -28,7 +30,8 @@ endif()
 
 target_link_libraries(NetAnalysis PRIVATE ${NETWORKIT_LINK_DIR} 
 #Qt6::Core Qt6::Gui Qt6::Charts Qt6::Widgets ${ADDITIONAL_LIBRARIES}
-Qt5::Core Qt5::Gui Qt5::Charts Qt5::Widgets Qt5::PrintSupport Qt5::DataVisualization ${ADDITIONAL_LIBRARIES} networkit ${Boost_LIBRARIES}
+Qt5::Core Qt5::Gui Qt5::Charts Qt5::Widgets Qt5::PrintSupport  ${ADDITIONAL_LIBRARIES} networkit ${Boost_LIBRARIES} Matplot++::cimg Matplot++::matplot Matplot++::nodesoup
+sciplot::sciplot
 )
 
 

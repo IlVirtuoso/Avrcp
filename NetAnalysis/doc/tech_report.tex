@@ -1,6 +1,8 @@
 \documentclass[]{article}
 \usepackage[]{graphicx}
 \usepackage[]{xcolor}
+\usepackage[]{adjustbox}
+
 
 \begin{document}
 \author{Matteo Ielacqua}
@@ -12,6 +14,21 @@
     GitHub is a double scope platform: In first place is used to store and develop software , either by open source developers and by companies, secondly is a social network for developers in which them can argue about technical solution and future projects. In GitHub a user can Fork ( copy the repository in his own userspace), view the code and star a repository. The star operation is a follow operation, thus a user can track the progress on certain repository. But is also possible to follow a developer to see which project he taken part to, and that's what the network is collecting. 
     \subsection*{What to expect}
     This is a social network, so we expect a sparse graph with very few node very popular and most of them not. Most of the nodes should be part of a giant component. Triadic closure is probably given by some developers working on the same project (assumpting that the node is respecting the requirements of have starred 10 repositiories) and so we expect the presence of some big communities given by the presence of big project (like for example Unreal Engine source code or Qt company code).  
+
+    \section{Basic Measures}
+    
+    \subsection*{Degree}
+    \begin{itemize}
+        \item Min: 1
+        \item Max: 9458
+        \item Mean: 15.3317
+        \item Variance: 6526.54
+    \end{itemize}
+
+    \begin{figure}[htp]
+        \centering
+        \includegraphics[scale=0.20]{./charts/degree_distribution.png}
+    \end{figure}
 
     \section*{Communities}
     Using PLM (Parallel Louvain) as community detection algorithm, the subsequent values are found:
@@ -33,7 +50,6 @@
         \item Size max: 37658
         \item Size Mean: 3427.27
     \end{itemize}
-
     Totally different result came up. Hovewer label propagation is confirming the hypothesis done before, developers tend to follow other developers outside projects. The very low modularity (near 0 this time) could indicate that this phenomenon is much like than expected. Let's see something about sizes, Louvain and Label propagation found 2 different result, but similiar in some way.\\
     \colorbox{black}{\includegraphics[width=15cm,height = 7.5cm]{charts/hist_cluster_sizePLM.png}}\\
     here the histogram of parallel louvain algorithm, the histogram report the frequency of each bin starting from the lower values terminating with the highests. Two facts are evident from there, first there are more small communities than bigger ones, second there aren't values between bigger and small, meaning that there are only small communities or very bigger ones. 

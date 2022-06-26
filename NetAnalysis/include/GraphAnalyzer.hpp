@@ -10,6 +10,7 @@
 #include <networkit/components/ComponentDecomposition.hpp>
 #include <networkit/community/CommunityDetectionAlgorithm.hpp>
 #include <networkit/io/EdgeListReader.hpp>
+#include <networkit/edgescores/TriangleEdgeScore.hpp>
 #include <future>
 #include <iostream>
 
@@ -96,6 +97,21 @@ namespace NetAnalysis::GraphMeasures
 
 		const Graph& GetGraph() const { return this->graph; }
 		void SetGraph(Graph& graph) { this->graph = graph; }
+
+		double Density() const
+		{
+			return graph.numberOfNodes() / graph.numberOfEdges();
+		}
+
+		std::vector<NetworKit::count> Triangles()
+		{
+
+			TriangleEdgeScore edgeScore{ this->GetGraph() };
+			graph.indexEdges();
+			edgeScore.run();
+			return edgeScore.scores();
+
+		}
 
 	};
 

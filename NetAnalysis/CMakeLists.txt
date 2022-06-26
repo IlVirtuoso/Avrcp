@@ -19,7 +19,7 @@ find_package(Matplot++ REQUIRED)
 find_package(sciplot REQUIRED)
 message(STATUS NETWORKIT: ${NETWORKIT_INCLUDE_DIR})
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})
-add_executable(NetAnalysis  "./src/main.cpp" "./src/Plotter.cpp"  "src/Centralities.cpp" "src/Communities.cpp")
+add_executable(NetAnalysis  "./src/main.cpp" )
 
 if(WIN32)
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})

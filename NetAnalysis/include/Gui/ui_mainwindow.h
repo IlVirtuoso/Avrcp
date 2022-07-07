@@ -23,7 +23,7 @@ QT_BEGIN_NAMESPACE
 
 class Ui_MainWindow
 {
-public:
+  public:
     QAction *actionOpen_Graph;
     QAction *actionCalculateBtw;
     QWidget *centralwidget;
@@ -69,24 +69,23 @@ public:
         actionCalculateBtw->setText(QCoreApplication::translate("MainWindow", "CalculateBtw", nullptr));
         menuFile->setTitle(QCoreApplication::translate("MainWindow", "File", nullptr));
     } // retranslateUi
-
 };
 
-namespace Ui {
-    class MainWindow: public Ui_MainWindow {
-    public:
-        void setupUi(QMainWindow* MainWindow) 
+namespace Ui
+{
+    class MainWindow : public Ui_MainWindow
+    {
+      public:
+        void setupUi(QMainWindow *MainWindow)
         {
             Ui_MainWindow::setupUi(MainWindow);
-            actionCalculateBtw->connect(actionCalculateBtw, QAction::toggle, CalculateBtw);
         }
-    private slots:
+      private slots:
 
         void CalculateBtw()
         {
             std::cout << "Calculus Enabled" << std::endl;
         }
-    
     };
 } // namespace Ui
 

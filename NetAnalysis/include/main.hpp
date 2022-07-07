@@ -1,7 +1,7 @@
 #pragma once
 #include "GraphAnalyzer.hpp"
 #include "Centralities.hpp"
-#include "Communities.hpp"	
+#include "Communities.hpp"
 #include "Components.hpp"
 #include <future>
 #include <filesystem>

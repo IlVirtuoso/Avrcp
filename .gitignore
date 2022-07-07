@@ -363,6 +363,7 @@ MigrationBackup/
 FodyWeavers.xsd
 /CMakeSettings.json
 build/.ninja_deps
+*/.vscode 
 build/.ninja_log
 build/build.ninja
 build/cmake_install.cmake
@@ -420,3 +421,8 @@ build/CMakeFiles/3.21.1/CompilerIdCXX/CMakeCXXCompilerId.cpp
 build/CMakeFiles/3.21.1/CompilerIdCXX/CompilerIdCXX.exe
 build/CMakeFiles/3.21.1/CompilerIdCXX/CompilerIdCXX.vcxproj
 /cmake-build-debug-visual-studio/
+compile_commands.json
+.clang-format
+.vscode/settings.json
+.vscode/settings.json
+.vscode/settings.json

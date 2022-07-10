@@ -1,4 +1,7 @@
 #pragma once
+#include <boost/accumulators/framework/extractor.hpp>
+#include <matplot/freestanding/axes_functions.h>
+#include <matplot/freestanding/plot.h>
 #ifndef COMMUNITIES_HPP
 #define COMMUNITIES_HPP
 #include "GraphAnalyzer.hpp"
@@ -49,6 +52,9 @@ namespace NetAnalysis::Routines
         out << "Size max: " << max(acc) << endl;
         out << "Size Mean: " << mean(acc) << endl;
         out << "Size variance: " << variance(acc) << endl;
+        matplot::title("Community Sizes Distribution");
+        auto hist = matplot::hist(values);
+        matplot::show();
     }
 
     void ExecuteCommunityAnalysis(GraphAnalyzer *analyzer);

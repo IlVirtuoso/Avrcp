@@ -1,5 +1,4 @@
 #include "Communities.hpp"
-
 namespace NetAnalysis::Routines
 {
     void ExecuteCommunityAnalysis(GraphAnalyzer *analyzer)

@@ -15,8 +15,8 @@ int main(int argc, char **argv)
     auto fileName = QFileDialog::getOpenFileName();
     auto analyzer = new NetAnalysis::GraphMeasures::GraphAnalyzer();
     analyzer->LoadGraph(fileName.toStdString());
-    auto features = QFileDialog::getOpenFileName();
-    analyzer->PopulateFeatures(features.toStdString());
+    // auto features = QFileDialog::getOpenFileName();
+    // analyzer->PopulateFeatures(features.toStdString());
     NetAnalysis::Routines::ExecuteCommunityAnalysis(analyzer);
     //  NetAnalysis::Routines::AnalyzeCentrality(analyzer);
     //  NetAnalysis::Routines::AveragePathLength(analyzer);

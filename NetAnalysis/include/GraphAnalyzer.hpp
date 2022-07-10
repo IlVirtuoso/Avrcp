@@ -1,5 +1,6 @@
 #pragma once
 
+#include <new>
 #ifndef GRAPHANALYZER_H
 #define GRAPHANALYZER_H
 #include <future>
@@ -51,16 +52,16 @@ namespace NetAnalysis::GraphMeasures
             std::ifstream featuresFile(filename);
             Json::Value featureValues{};
             featuresFile >> featureValues;
-
+            std::map<node, std::vector<int>> feat{};
             auto attr = this->graph.nodeAttributes().attach<std::vector<int>>("features");
-            graph.forNodes([featureValues, &attr, this](node v) {
+            graph.forNodes([featureValues, &feat](node v) {
                 auto ref = featureValues[std::to_string(v)];
                 std::vector<int> features{};
                 for (int i = 0; i < ref.size(); i++)
                 {
                     features.push_back(ref[i].asInt());
                 }
-                attr.set(v, features);
+                feat.emplace(v, features);
             });
         }
 
@@ -125,6 +126,23 @@ namespace NetAnalysis::GraphMeasures
             graph.indexEdges();
             edgeScore.run();
             return edgeScore.scores();
+        }
+
+        Graph &GenGraphFromSubset(std::vector<node> nodes)
+        {
+            Graph *subgraph = new Graph();
+            subgraph->addNodes(nodes.size());
+            for (int i = 0; i < nodes.size(); i++)
+            {
+                for (int j = 0; j < nodes.size(); j++)
+                {
+                    if (graph.hasEdge(nodes[i], nodes[j]))
+                    {
+                        subgraph->addEdge(i, j);
+                    }
+                }
+            }
+            return *subgraph;
         }
     };
 

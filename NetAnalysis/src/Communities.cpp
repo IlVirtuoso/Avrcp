@@ -2,11 +2,17 @@
 #include "GraphAnalyzer.hpp"
 #include <boost/array.hpp>
 #include <boost/container/vector.hpp>
+#include <cstddef>
 #include <filesystem>
 #include <networkit/Globals.hpp>
 #include <networkit/community/PLP.hpp>
+#include <networkit/io/DotGraphWriter.hpp>
 #include <networkit/io/DotPartitionWriter.hpp>
+#include <set>
+#include <string>
+#include <type_traits>
 #include <vector>
+
 namespace NetAnalysis::Routines
 {
     void ShowCommunityAlgorithmData(CommunityDetectionAlgorithm &map, const Graph &graph, QString chartFolder)
@@ -49,10 +55,26 @@ namespace NetAnalysis::Routines
         NetAnalysis::Routines::ShowCommunityAlgorithmData(labelProp, analyzer->GetGraph(), "./charts/PLP");
         auto PLMPart = comm.getPartition();
         auto PLPPart = labelProp.getPartition();
+        PrintPartitions(analyzer, PLMPart, "./data/communities/PLM", true);
+        PrintPartitions(analyzer, PLPPart, "./data/communities/PLP", true);
     }
 
-    void PrintPartitions(GraphAnalyzer *analyzer, NetworKit::Partition &partition, std::string foldername,
+    void PrintPartitions(GraphAnalyzer *analyzer, const NetworKit::Partition &partition, std::string foldername,
                          bool onePerSize)
     {
+        int commId = 0;
+        std::set<size_t> sizes{};
+        auto partitions = partition.getSubsets();
+        for (auto part : partitions)
+        {
+            auto size = part.size();
+            if (sizes.find(size) == sizes.end() || !onePerSize)
+            {
+                sizes.insert(size);
+                auto gen = analyzer->GenGraphFromSubset(part);
+                DotGraphWriter().write(gen, foldername + "/community_" + std::to_string(commId) + ".dot");
+            }
+            commId++;
+        }
     }
 } // namespace NetAnalysis::Routines

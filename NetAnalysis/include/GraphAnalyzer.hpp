@@ -1,6 +1,7 @@
 #pragma once
 
 #include <new>
+#include <set>
 #ifndef GRAPHANALYZER_H
 #define GRAPHANALYZER_H
 #include <future>
@@ -128,7 +129,7 @@ namespace NetAnalysis::GraphMeasures
             return edgeScore.scores();
         }
 
-        Graph &GenGraphFromSubset(std::vector<node> nodes)
+        Graph &GenGraphFromSubset(const std::vector<node> &nodes)
         {
             Graph *subgraph = new Graph();
             subgraph->addNodes(nodes.size());
@@ -136,13 +137,25 @@ namespace NetAnalysis::GraphMeasures
             {
                 for (int j = 0; j < nodes.size(); j++)
                 {
-                    if (graph.hasEdge(nodes[i], nodes[j]))
+                    if (graph.hasEdge(nodes[i], nodes[j]) && !subgraph->hasEdge(i, j))
                     {
                         subgraph->addEdge(i, j);
                     }
                 }
             }
             return *subgraph;
+        }
+
+        Graph &GenGraphFromSubset(const std::set<node> &nodes)
+        {
+            std::vector<node> vector{};
+            auto itr = nodes.begin();
+            while (itr != nodes.end())
+            {
+                vector.push_back(*itr);
+                itr++;
+            }
+            return GenGraphFromSubset(vector);
         }
     };
 

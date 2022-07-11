@@ -34,8 +34,8 @@ namespace NetAnalysis::Routines
     void ShowCommunityAlgorithmData(CommunityDetectionAlgorithm &algorithm, const Graph &graph,
                                     QString chartFolder = "./charts");
 
-    void PrintPartitions(GraphAnalyzer *analyzer, NetworKit::Partition &partition,
-                         std::string foldername = "./data/communities", bool onePerSize = true);
+    void PrintPartitions(GraphAnalyzer *analyzer, const NetworKit::Partition &partition, std::string foldername,
+                         bool onePerSize);
 
     void ExecuteCommunityAnalysis(GraphAnalyzer *analyzer);
 } // namespace NetAnalysis::Routines

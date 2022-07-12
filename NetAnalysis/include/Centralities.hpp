@@ -1,8 +1,10 @@
 #pragma once
+#include <string>
 #ifndef CENTRALITIES_HPP
 #define CENTRALITIES_HPP
 
 #include "GraphAnalyzer.hpp"
+#include "Logger.hpp"
 #include <QString>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/framework/accumulator_set.hpp>
@@ -26,7 +28,6 @@
 #include <networkit/global/ClusteringCoefficient.hpp>
 #include <sstream>
 #include <vector>
-
 namespace NetAnalysis::Routines
 {
 
@@ -35,15 +36,14 @@ namespace NetAnalysis::Routines
                                            boost::accumulators::tag::median, boost::accumulators::tag::max,
                                            boost::accumulators::tag::min>>;
 
-    template <typename T> void ShowCentralityResults(T &algorithm)
+    template <typename T> void ShowCentralityResults(T &algorithm, std::string folderName)
     {
         using namespace boost::accumulators;
         static_assert(std::is_convertible<T &, NetworKit::Centrality &>::value);
         GraphMeasures::Centrality &algo = algorithm;
-        QString name(typeid(T).name());
-        QString path = "./charts/" + name.replace(":", "").replace("class", "").trimmed();
-        std::filesystem::create_directory(path.toStdString());
-        std::ofstream out(path.toStdString() + "/statistics.txt");
+        std::string path = "./charts/" + folderName;
+        std::filesystem::create_directory(path);
+        std::stringstream out{};
         accumulator_set<double, stats<tag::mean, tag::min, tag::max, tag::variance>> acc;
         for (auto score : algo.scores())
             acc(score);
@@ -54,7 +54,9 @@ namespace NetAnalysis::Routines
         out << "Teoretical maximum: " << algo.maximum() << "\n";
 
         matplot::hist(algo.scores(), matplot::histogram::binning_algorithm::sqrt,
-                      matplot::histogram::normalization::cummulative_count);
+                      matplot::histogram::normalization::probability);
+        matplot::save(path + "/scoreDistribution.png");
+        log.TraceInformation(out.str());
     }
 
     void ShowAccumulatorsFeatures(DoubleAccumulator &acc, std::ostream &out);

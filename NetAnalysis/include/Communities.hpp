@@ -8,6 +8,7 @@
 #ifndef COMMUNITIES_HPP
 #define COMMUNITIES_HPP
 #include "GraphAnalyzer.hpp"
+#include "Logger.hpp"
 #include <QString>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/framework/accumulator_set.hpp>

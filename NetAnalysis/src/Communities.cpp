@@ -4,11 +4,14 @@
 #include <boost/container/vector.hpp>
 #include <cstddef>
 #include <filesystem>
+#include <matplot/axes_objects/histogram.h>
+#include <matplot/freestanding/plot.h>
 #include <networkit/Globals.hpp>
 #include <networkit/community/PLP.hpp>
 #include <networkit/io/DotGraphWriter.hpp>
 #include <networkit/io/DotPartitionWriter.hpp>
 #include <set>
+#include <sstream>
 #include <string>
 #include <type_traits>
 #include <vector>
@@ -20,7 +23,7 @@ namespace NetAnalysis::Routines
 
         using std::endl;
         using namespace boost::accumulators;
-        std::ofstream out((chartFolder + "/statistics.txt").toStdString().c_str());
+        std::stringstream out{};
         Modularity mod{};
         out << "Modularity: " << mod.getQuality(map.getPartition(), graph) << endl;
         out << "Partitions: " << map.getPartition().numberOfSubsets() << endl;
@@ -39,20 +42,27 @@ namespace NetAnalysis::Routines
         out << "Size Mean: " << mean(acc) << endl;
         out << "Size variance: " << variance(acc) << endl;
         matplot::title("Community Sizes Distribution");
-        auto hist = matplot::hist(values);
+        auto hist = matplot::hist(values, matplot::histogram::binning_algorithm::automatic,
+                                  matplot::histogram::normalization::pdf);
+        matplot::save((chartFolder + "/size_distribution.png").toStdString());
+        log.TraceInformation(out.str());
     }
 
     void ExecuteCommunityAnalysis(GraphAnalyzer *analyzer)
     {
-        std::filesystem::create_directories("charts/PLM");
+        log << "Executing community Measures";
+        std::filesystem::create_directories("charts/community/PLM");
+
+        log << "Computing Parallel Louvain";
         auto comm = PLM(analyzer->GetGraph(), true, 1.0, "balanced", 100);
         comm.run();
-        NetAnalysis::Routines::ShowCommunityAlgorithmData(comm, analyzer->GetGraph(), "./charts/PLM");
+        NetAnalysis::Routines::ShowCommunityAlgorithmData(comm, analyzer->GetGraph(), "./charts/community/PLM");
 
-        std::filesystem::create_directories("charts/PLP");
+        log << "Computing Parallel Label Propagation";
+        std::filesystem::create_directories("charts/community/PLP");
         auto labelProp = PLP{analyzer->GetGraph(), 20, 100};
         labelProp.run();
-        NetAnalysis::Routines::ShowCommunityAlgorithmData(labelProp, analyzer->GetGraph(), "./charts/PLP");
+        NetAnalysis::Routines::ShowCommunityAlgorithmData(labelProp, analyzer->GetGraph(), "./charts/community/PLP");
         auto PLMPart = comm.getPartition();
         auto PLPPart = labelProp.getPartition();
         PrintPartitions(analyzer, PLMPart, "./data/communities/PLM", true);
@@ -63,6 +73,7 @@ namespace NetAnalysis::Routines
                          bool onePerSize)
     {
         int commId = 0;
+        std::filesystem::create_directories(foldername);
         std::set<size_t> sizes{};
         auto partitions = partition.getSubsets();
         for (auto part : partitions)

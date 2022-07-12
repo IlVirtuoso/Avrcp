@@ -18,7 +18,8 @@ find_package(Matplot++ CONFIG REQUIRED)
 find_package(jsoncpp CONFIG REQUIRED)
 message(STATUS NETWORKIT: ${NETWORKIT_INCLUDE_DIR})
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})
-add_executable(NetAnalysis  "./src/main.cpp"  "./src/Centralities.cpp"  "./src/Communities.cpp" "./src/Components.cpp" )
+add_executable(NetAnalysis  "./src/main.cpp"  "./src/Centralities.cpp"  "./src/Communities.cpp" "./src/Components.cpp"
+"./src/Logger.cpp" )
 
 if(WIN32)
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})

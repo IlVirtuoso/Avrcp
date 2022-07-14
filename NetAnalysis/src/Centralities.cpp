@@ -1,6 +1,8 @@
 #include "Centralities.hpp"
+#include <future>
 #include <networkit/centrality/Closeness.hpp>
 #include <networkit/centrality/DegreeCentrality.hpp>
+#include <networkit/distance/BFS.hpp>
 #include <networkit/global/ClusteringCoefficient.hpp>
 #include <sstream>
 #include <streambuf>
@@ -15,12 +17,19 @@ void NetAnalysis::Routines::AveragePathLength(GraphAnalyzer *analyzer)
     std::stringstream out{};
     int numNodes = analyzer->GetGraph().numberOfNodes();
     DoubleAccumulator acc;
-    out << "Computing AveragePathLength" << endl;
-    analyzer->GetGraph().forNodes([analyzer, &acc, &numNodes, &out](node v) {
-        auto algo = analyzer->ComputeGraphDistance<Dijkstra>(v).get();
-        for (auto result : algo.getDistances())
-            acc(result);
-        out << "Completed at: " << (((double)v / numNodes) * 100);
+    out << "Computing AveragePathLength";
+
+    auto graph = analyzer->GetGraph();
+    analyzer->GetGraph().forNodes([&acc, &graph](node v) {
+        NetworKit::BFS algo(graph, v);
+        std::async(
+            [&](NetworKit::BFS algo, DoubleAccumulator acc) {
+            algo.run();
+            for (auto value : algo.getDistances())
+                acc(value);
+            log << "Completed At: " << v;
+            },
+            algo, acc);
     });
     out << "Path measures" << endl;
     ShowAccumulatorsFeatures(acc, out);

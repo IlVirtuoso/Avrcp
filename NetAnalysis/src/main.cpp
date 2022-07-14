@@ -17,12 +17,7 @@ int main(int argc, char **argv)
     analyzer->LoadGraph(fileName.toStdString());
     // auto features = QFileDialog::getOpenFileName();
     // analyzer->PopulateFeatures(features.toStdString());
-    NetAnalysis::Routines::ExecuteCommunityAnalysis(analyzer);
-    NetAnalysis::Routines::AnalyzeCentrality(analyzer);
     NetAnalysis::Routines::AveragePathLength(analyzer);
-    NetAnalysis::Routines::ClusteringCoefficients(analyzer);
-    NetAnalysis::Routines::DegreeAverage(analyzer);
-    NetAnalysis::Routines::ExecuteComponentsAnalysis(analyzer);
 
     return app->exec();
 }

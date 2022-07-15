@@ -96,12 +96,46 @@
     \end{center}
     It seems that what had been told for the closeness can be said for the betwenness, in fact most of the nodes seems to have 0 flow, meaning that no shortest path cross them at all, meanwhile there are very few nodes with the maximum value, this could mean that remove them will crash the network functionality. Let's compare the result of estimated betwenness with the exact one :
     \begin{center}
-        \includegraphics{charts/btw_dist.png}
+        \includegraphics[scale=0.5]{charts/btw_dist.png}
     \end{center}
     the distributions are similiar, sypthom that the estimated betwenness perform quite well in estimating the value of the exact betwenness despite the lack of theoretical proof that ebtw works. Let's exploit the context to explain the causes of the behaviour of those two measures. Nodes are (for the bigger part) equally closer one to each other , this is compatible with the context, most of the nodes are employers working on common repositiories, so expect for the holders of those repositiories most of the nodes are leafs. Same could be say for the betwenness, most of the nodes aren't important at all, except for hubs of big projects, for example the maximum value of betwenness is reached in this network by node 31890 (dalinhuang99) former holder of paypaw project, a platform for exchange bitcoins (now not present anymore).
 
     \section*{Communities} 
+    Communities where detected using the implementation brought by networkit of the Parallel Louvain Method(PLM), with refine parameter active , a gamma resolution of 1.0 and allowing the algorithm to perform till 1000 iterations. The refine parameter make the algorithm perform a second move phase to refine the parameters , the gamma resolution parameter defines the multi resolution parameter. Seeing that the algorithm yelds different results that depends on the order of visiting, it was runned multiple times taking in account the lowest possible cut size (edge cut).
+    \begin{itemize}
+        \item n communities            26
+        \item min community size        3
+        \item max community size     7883
+        \item avg. community size    1450
+        \item imbalance              5.43655
+        \item edge cut             105214
+        \item edge cut (portion)        0.364059
+        \item modularity                0.461686
+    \end{itemize}
+    The algorithm find a remarkable number of communities considerably big in size, taking in account that each of those communities can probably represent a community of developers working on different projects, then the size can acquire a specific meaning, such that it represent the manpower at disposition for those projects. 
+    Seeing that the result of the algorithm is a network composed by supernode let's also observe the graph itself.
+    \begin{center}
+        \includegraphics[scale=0.5]{charts/louvain.png}
+    \end{center}
+    the graph show a central big community with a lots of nodes (the self loops) connected in a hub style to all the other communities as expected from this network. Let's see how the size is distributed accross communities:
 
+    \begin{center}
+        \includegraphics[scale=0.5]{charts/comm_size_dist.png}
+    \end{center}
+    the chart clearly show what is evident just from the graph, one very big community with other satellites less and less big, so in general a power law in this distribution is not expected.
+    \begin{center}
+        \includegraphics[scale=0.5]{charts/comms_size_powerlaw.png}
+    \end{center}
+    Comparing the distribution with a powerlaw and an exponential distribution is evident that none of the two approximate well the communities size distribution. 
+
+    \subsection*{A targeted community example}
+    Let's plot a community of this network, in order to obtain a viewable result a tiny community was selected.
+
+    \begin{center}
+        \includegraphics[]{charts/community14_graph.png}
+    \end{center}
+    The community is printed using the kamada_kaway layout that is based on the kamada-kawai path-length cost function. In practice the layout is builded starting from a circular layout and then nodes are placed using kamada & kawai path length cost function. The red node in the graph represent machine learning developers, meanwhile the blue ones are web developers, using the context as an exploit to make hypothesis on this community, if perhaps the center is the holder of the project(s) maybe those are part of a web platform that involves the use of machine learning algorithms. This community in particular has 255 internal links and 135 external links, meaning that his internal link density is 0.0956. 
+    
     
 
 \end{document}

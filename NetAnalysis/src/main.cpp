@@ -18,6 +18,5 @@ int main(int argc, char **argv)
     // auto features = QFileDialog::getOpenFileName();
     // analyzer->PopulateFeatures(features.toStdString());
     NetAnalysis::Routines::AveragePathLength(analyzer);
-
     return app->exec();
 }

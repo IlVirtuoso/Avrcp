@@ -1,4 +1,7 @@
 {
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/out/build/x64-Debug"
+    ],
     "files.associations": {
         "algorithm": "cpp",
         "barrier": "cpp",

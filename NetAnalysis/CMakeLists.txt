@@ -16,6 +16,7 @@ FIND_PACKAGE(Boost REQUIRED)
 find_package(Qt5 COMPONENTS Core Gui Charts Widgets PrintSupport DataVisualization)
 find_package(Matplot++ CONFIG REQUIRED)
 find_package(jsoncpp CONFIG REQUIRED)
+find_package(networkit)
 message(STATUS NETWORKIT: ${NETWORKIT_INCLUDE_DIR})
 message(STATUS NETWORKIT: ${NETWORKIT_LINK_DIR})
 add_executable(NetAnalysis  "./src/main.cpp"  "./src/Centralities.cpp"  "./src/Communities.cpp" "./src/Components.cpp"

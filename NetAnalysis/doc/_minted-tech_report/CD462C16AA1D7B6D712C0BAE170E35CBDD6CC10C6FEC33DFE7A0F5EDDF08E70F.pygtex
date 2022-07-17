@@ -1,0 +1,51 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+    \PYG{c+c1}{\PYGZsh{}calculate the probability to not get infected}
+\PYG{k}{def} \PYG{n+nf}{notP}\PYG{p}{(}\PYG{n}{step}\PYG{p}{,} \PYG{n}{t\PYGZus{}patch}\PYG{p}{):}
+    \PYG{k}{return} \PYG{n}{step}\PYG{o}{*}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{o}{/}\PYG{n}{t\PYGZus{}patch}\PYG{p}{)}
+    \PYG{k}{pass}
+
+    \PYG{c+c1}{\PYGZsh{} generate a float[0,1] if lower than 1\PYGZhy{}p then get infected else not}
+\PYG{k}{def} \PYG{n+nf}{TossCoin}\PYG{p}{(}\PYG{n}{notp}\PYG{p}{:} \PYG{n+nb}{float}\PYG{p}{):}
+    \PYG{k}{return}  \PYG{n}{random}\PYG{o}{.}\PYG{n}{random}\PYG{p}{()}\PYG{o}{\PYGZlt{}=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{notp}
+    \PYG{k}{pass}
+
+
+\PYG{k}{def} \PYG{n+nf}{PerformStep}\PYG{p}{(}\PYG{n}{graph}\PYG{p}{:} \PYG{n}{nx}\PYG{o}{.}\PYG{n}{graph}\PYG{o}{.}\PYG{n}{Graph}\PYG{p}{,} \PYG{n}{source}\PYG{p}{:} \PYG{n+nb}{int}\PYG{p}{,} \PYG{n}{p}\PYG{p}{:} \PYG{n+nb}{float}\PYG{p}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n+nb}{list}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{]:}
+    \PYG{n}{infected} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{n}{itr} \PYG{o}{=} \PYG{n}{nxgraph}\PYG{o}{.}\PYG{n}{neighbors}\PYG{p}{(}\PYG{n}{source}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{target} \PYG{o+ow}{in} \PYG{n}{itr}\PYG{p}{:}
+        \PYG{k}{if}  \PYG{o+ow}{not} \PYG{n}{graph}\PYG{o}{.}\PYG{n}{nodes}\PYG{p}{[}\PYG{n}{target}\PYG{p}{][}\PYG{l+s+s2}{\PYGZdq{}infected\PYGZdq{}}\PYG{p}{]} \PYG{o+ow}{and} \PYG{o+ow}{not} \PYG{n}{graph}\PYG{o}{.}\PYG{n}{nodes}\PYG{p}{[}\PYG{n}{target}\PYG{p}{][}\PYG{l+s+s2}{\PYGZdq{}removed\PYGZdq{}}\PYG{p}{]:}
+            \PYG{k}{if} \PYG{n}{TossCoin}\PYG{p}{(}\PYG{n}{p}\PYG{p}{):}
+                \PYG{n}{graph}\PYG{o}{.}\PYG{n}{nodes}\PYG{p}{[}\PYG{n}{target}\PYG{p}{][}\PYG{l+s+s2}{\PYGZdq{}infected\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{k+kc}{True}
+                \PYG{n}{infected}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{target}\PYG{p}{)}
+            \PYG{k}{pass}
+        \PYG{k}{pass}
+    \PYG{k}{return} \PYG{n}{infected}
+
+\PYG{c+c1}{\PYGZsh{}Custom sir model, take a node as a source of infection and a t\PYGZus{}patch that is the time we expect the patch}
+\PYG{k}{def} \PYG{n+nf}{SIR}\PYG{p}{(}\PYG{n}{graph}\PYG{p}{:} \PYG{n}{nx}\PYG{o}{.}\PYG{n}{graph}\PYG{o}{.}\PYG{n}{Graph}\PYG{p}{,}\PYG{n}{source} \PYG{p}{:} \PYG{n+nb}{int}\PYG{p}{,} \PYG{n}{t\PYGZus{}patch}\PYG{p}{:} \PYG{n+nb}{int}\PYG{p}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n+nb}{dict}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{,}\PYG{n+nb}{list}\PYG{p}{[}\PYG{n+nb}{int}\PYG{p}{]]:}
+    \PYG{n}{frontier} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{n}{step} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{n}{steps} \PYG{o}{=} \PYG{p}{\PYGZob{}\PYGZcb{}}
+    \PYG{n}{frontier}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{source}\PYG{p}{)}
+    \PYG{n}{nx}\PYG{o}{.}\PYG{n}{set\PYGZus{}node\PYGZus{}attributes}\PYG{p}{(}\PYG{n}{nxgraph}\PYG{p}{,}\PYG{k+kc}{False}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}infected\PYGZdq{}}\PYG{p}{)}
+    \PYG{n}{nx}\PYG{o}{.}\PYG{n}{set\PYGZus{}node\PYGZus{}attributes}\PYG{p}{(}\PYG{n}{nxgraph}\PYG{p}{,}\PYG{k+kc}{False}\PYG{p}{,}\PYG{l+s+s2}{\PYGZdq{}removed\PYGZdq{}}\PYG{p}{)}
+    \PYG{k}{while} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{frontier}\PYG{p}{)}\PYG{o}{\PYGZgt{}}\PYG{l+m+mi}{0}\PYG{p}{:}
+        \PYG{n}{nextfrontier} \PYG{o}{=} \PYG{p}{[]}
+        \PYG{n}{steps}\PYG{p}{[}\PYG{n}{step}\PYG{p}{]} \PYG{o}{=} \PYG{p}{[]}
+        \PYG{k}{while} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{frontier}\PYG{p}{)}\PYG{o}{\PYGZgt{}}\PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{n}{newt} \PYG{o}{=} \PYG{n}{frontier}\PYG{o}{.}\PYG{n}{pop}\PYG{p}{()}
+            \PYG{n}{nxgraph}\PYG{o}{.}\PYG{n}{nodes}\PYG{p}{[}\PYG{n}{newt}\PYG{p}{][}\PYG{l+s+s2}{\PYGZdq{}removed\PYGZdq{}}\PYG{p}{]} \PYG{o}{=} \PYG{k+kc}{True}
+            \PYG{n}{stepResult} \PYG{o}{=} \PYG{n}{PerformStep}\PYG{p}{(}\PYG{n}{graph}\PYG{p}{,}\PYG{n}{newt}\PYG{p}{,}\PYG{n}{notP}\PYG{p}{(}\PYG{n}{step}\PYG{p}{,}\PYG{n}{t\PYGZus{}patch}\PYG{p}{))}
+            \PYG{k}{for} \PYG{n}{node} \PYG{o+ow}{in} \PYG{n}{stepResult}\PYG{p}{:}
+                \PYG{n}{nextfrontier}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{node}\PYG{p}{)}
+                \PYG{k}{pass}
+            \PYG{k}{pass}
+        \PYG{k}{for} \PYG{n}{node} \PYG{o+ow}{in} \PYG{n}{nextfrontier}\PYG{p}{:}
+            \PYG{n}{steps}\PYG{p}{[}\PYG{n}{step}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{node}\PYG{p}{)}
+            \PYG{n}{frontier}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{node}\PYG{p}{)}
+            \PYG{k}{pass}
+        \PYG{n}{nextfrontier}\PYG{o}{.}\PYG{n}{clear}\PYG{p}{()}
+        \PYG{n}{step} \PYG{o}{+=} \PYG{l+m+mi}{1}
+    \PYG{k}{return} \PYG{n}{steps}
+\end{Verbatim}

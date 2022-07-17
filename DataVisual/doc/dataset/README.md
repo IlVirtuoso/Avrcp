@@ -1,61 +1,56 @@
-If this Data Set is useful, and upvote is appreciated. This data approach student achievement in secondary education of two Portuguese schools. The data attributes include student grades, demographic, social and school related features) and it was collected by using school reports and questionnaires. Two datasets are provided regarding the performance in two distinct subjects: Mathematics (mat) and Portuguese language (por). In [Cortez and Silva, 2008], the two datasets were modeled under binary/five-level classification and regression tasks. Important note: the target attribute G3 has a strong correlation with attributes G2 and G1. This occurs because G3 is the final year grade (issued at the 3rd period), while G1 and G2 correspond to the 1st and 2nd-period grades. It is more difficult to predict G3 without G2 and G1, but such prediction is much more useful (see paper source for more details).
+from https://github.com/owid/energy-data
 
+Data on Energy by Our World in Data
+Our complete Energy dataset is a collection of key metrics maintained by Our World in Data. It is updated regularly and includes data on energy consumption (primary energy, per capita, and growth rates), energy mix, electricity mix and other relevant metrics.
 
-About this file
+🗂️ Download our complete Energy dataset : CSV | XLSX | JSON
+We will continue to publish updated data on Energy as it becomes available. Most metrics are published on an annual basis.
 
-Retrieved from:
-https://archive.ics.uci.edu/ml/datasets/Student+Performance
+Our data sources
+Energy consumption (primary energy, energy mix and energy intensity): this data is sourced from a combination of three sources—the BP Statistical Review of World Energy, the EIA and the SHIFT Data Portal.
+Electricity generation (electricity generation, and electricity mix): this data is sourced from a combination of three sources—the BP Statistical Review of World Energy, the Ember – Data Explorer and the Ember European Electricity Review.
+Other variables: this data is collected from a variety of sources (United Nations, World Bank, Gapminder, Maddison Project Database, etc.). More information is available in our codebook.
+The complete Our World in Data Energy dataset
+Our complete Energy dataset is available in CSV, XLSX, and JSON formats.
 
-Source:
-Paulo Cortez, University of Minho, GuimarÃ£es, Portugal, http://www3.dsi.uminho.pt/pcortez
+The CSV and XLSX files follow a format of 1 row per location and year. The JSON version is split by country, with an array of yearly records.
 
-Data Set Information:
+The variables represent all of our main data related to energy consumption, energy mix, electricity mix as well as other variables of potential interest.
 
-This data approach student achievement in secondary education of two Portuguese schools. The data attributes include student grades, demographic, social and school related features) and it was collected by using school reports and questionnaires. Two datasets are provided regarding the performance in two distinct subjects: Mathematics (mat) and Portuguese language (por). In [Cortez and Silva, 2008], the two datasets were modeled under binary/five-level classification and regression tasks. Important note: the target attribute G3 has a strong correlation with attributes G2 and G1. This occurs because G3 is the final year grade (issued at the 3rd period), while G1 and G2 correspond to the 1st and 2nd period grades. It is more difficult to predict G3 without G2 and G1, but such prediction is much more useful (see paper source for more details).
+A full codebook is made available, with a description and source for each variable in the dataset.
 
-Attribute Information: 32 columns
+Changelog
+On April 8, 2022:
+Electricity data from Ember was updated (using the Global Electricity Review 2022).
+Data on greenhouse-gas emissions in electricity generation was added (greenhouse_gas_emissions).
+Data on emissions intensity is now provided for most countries in the world.
+On March 25, 2022:
+Data on net electricity imports and electricity demand was added.
+BP data was updated (using the Statistical Review of the World Energy 2021).
+Maddison data on GDP was updated (using the Maddison Project Database 2020).
+EIA data on primary energy consumption was included in the dataset.
+Some issues in the dataset were corrected (for example some missing data in production by fossil fuels).
+On February 14, 2022:
+Some issues were corrected in the electricity data, and the energy dataset was updated accordingly.
+The json and xlsx dataset files were removed from GitHub in favor of an external storage service, to keep this repository at a reasonable size.
+The carbon_intensity_elec column was added back into the energy dataset.
+On February 3, 2022, we updated the Ember global electricity data, combined with the European Electricity Review from Ember.
+The carbon_intensity_elec column was removed from the energy dataset (since no updated data was available).
+Columns for electricity from other renewable sources excluding bioenergy were added (namely other_renewables_elec_per_capita_exc_biofuel, and other_renewables_share_elec_exc_biofuel).
+Certain countries and regions have been removed from the dataset, because we identified significant inconsistencies in the original data.
+On March 31, 2021, we updated 2020 electricity mix data.
+On September 9, 2020, the first version of this dataset was made available.
+Data alterations
+We standardize names of countries and regions. Since the names of countries and regions are different in different data sources, we standardize all names to the Our World in Data standard entity names.
+We recalculate primary energy in terawatt-hours. The primary data sources on energy—the BP Statistical Review of World Energy, for example—typically report consumption in terms of exajoules. We have recalculated these figures as terawatt-hours using a conversion factor of 277.8.
+We calculate per capita figures. All of our per capita figures are calculated from our metric Population, which is included in the complete dataset. These population figures are sourced from Gapminder and the UN World Population Prospects (UNWPP).
+We remove inconsistent data. Certain countries and regions have been removed because their original data presented anomalies. They may be included again in further data releases.
+License
+All visualizations, data, and code produced by Our World in Data are completely open access under the Creative Commons BY license. You have the permission to use, distribute, and reproduce these in any medium, provided the source and authors are credited.
 
-Citation Request:
+The data produced by third parties and made available by Our World in Data is subject to the license terms from the original third-party authors. We will always indicate the original source of the data in our database, and you should always check the license of any such third-party data before use.
 
-Please include this citation if you plan to use this database:
+Authors
+This data has been collected, aggregated, and documented by Hannah Ritchie, Pablo Rosado, Edouard Mathieu, Max Roser.
 
-P. Cortez and A. Silva. Using Data Mining to Predict Secondary School Student Performance. In A. Brito and J. Teixeira Eds., Proceedings of 5th FUture BUsiness TEChnology Conference (FUBUTEC 2008) pp. 5-12, Porto, Portugal, April, 2008, EUROSIS, ISBN 978-9077381-39-7.
-[Web Link]
-
-
-# Attributes for both student-mat.csv (Math course) and student-por.csv (Portuguese language course) datasets:
-1 school - student's school (binary: 'GP' - Gabriel Pereira or 'MS' - Mousinho da Silveira)
-2 sex - student's sex (binary: 'F' - female or 'M' - male)
-3 age - student's age (numeric: from 15 to 22)
-4 address - student's home address type (binary: 'U' - urban or 'R' - rural)
-5 famsize - family size (binary: 'LE3' - less or equal to 3 or 'GT3' - greater than 3)
-6 Pstatus - parent's cohabitation status (binary: 'T' - living together or 'A' - apart)
-7 Medu - mother's education (numeric: 0 - none, 1 - primary education (4th grade), 2 â€“ 5th to 9th grade, 3 â€“ secondary education or 4 â€“ higher education)
-8 Fedu - father's education (numeric: 0 - none, 1 - primary education (4th grade), 2 â€“ 5th to 9th grade, 3 â€“ secondary education or 4 â€“ higher education)
-9 Mjob - mother's job (nominal: 'teacher', 'health' care related, civil 'services' (e.g. administrative or police), 'at_home' or 'other')
-10 Fjob - father's job (nominal: 'teacher', 'health' care related, civil 'services' (e.g. administrative or police), 'at_home' or 'other')
-11 reason - reason to choose this school (nominal: close to 'home', school 'reputation', 'course' preference or 'other')
-12 guardian - student's guardian (nominal: 'mother', 'father' or 'other')
-13 traveltime - home to school travel time (numeric: 1 - <15 min., 2 - 15 to 30 min., 3 - 30 min. to 1 hour, or 4 - >1 hour)
-14 studytime - weekly study time (numeric: 1 - <2 hours, 2 - 2 to 5 hours, 3 - 5 to 10 hours, or 4 - >10 hours)
-15 failures - number of past class failures (numeric: n if 1<=n<3, else 4)
-16 schoolsup - extra educational support (binary: yes or no)
-17 famsup - family educational support (binary: yes or no)
-18 paid - extra paid classes within the course subject (Math or Portuguese) (binary: yes or no)
-19 activities - extra-curricular activities (binary: yes or no)
-20 nursery - attended nursery school (binary: yes or no)
-21 higher - wants to take higher education (binary: yes or no)
-22 internet - Internet access at home (binary: yes or no)
-23 romantic - with a romantic relationship (binary: yes or no)
-24 famrel - quality of family relationships (numeric: from 1 - very bad to 5 - excellent)
-25 freetime - free time after school (numeric: from 1 - very low to 5 - very high)
-26 goout - going out with friends (numeric: from 1 - very low to 5 - very high)
-27 Dalc - workday alcohol consumption (numeric: from 1 - very low to 5 - very high)
-28 Walc - weekend alcohol consumption (numeric: from 1 - very low to 5 - very high)
-29 health - current health status (numeric: from 1 - very bad to 5 - very good)
-30 absences - number of school absences (numeric: from 0 to 93)
-
-# these grades are related with the course subject, Math or Portuguese:
-31 G1 - first period grade (numeric: from 0 to 20)
-31 G2 - second period grade (numeric: from 0 to 20)
-32 G3 - final grade (numeric: from 0 to 20, output target)
+The mission of Our World in Data is to make data and research on the world’s largest problems understandable and accessible. Read more about our mission.

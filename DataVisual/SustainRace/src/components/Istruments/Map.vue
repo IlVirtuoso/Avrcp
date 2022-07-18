@@ -1,7 +1,7 @@
 <template>
 <div>
     <p>Map Loaded</p>
-<div class="MapContainer" id="Map" >
+<div class="MapContainer" v-bind:id="id" >
 </div>
 </div>
 </template>
@@ -18,7 +18,7 @@ import { fileURLToPath } from "url";
 
 export default defineComponent({
 
-    props:['id', 'parameter', 'dataIn', 'title', 'projectionType', 'startYear', 'endYear', 'currentYear'],
+    props:['id', 'parameter', 'dataIn', 'title', 'projectionType', 'currentYear' , 'startYear', 'endYear'],
     data:()=>{
         return { datamanger: new DataManager(), Id : "", loaded:false }
     },
@@ -72,38 +72,40 @@ export default defineComponent({
              return data as plotly.Data[];
         },
 
-        BuildFrames():  plotly.Frame[] {
-
-            var frames : Array<Partial<plotly.Frame>> = new Array<Partial<plotly.Frame>>();
-            for(var i = this.startYear; i <= this.endYear; i++ ){
-                frames.push({
-                    data:[{
-                        z: this.datamanger.GetYear(i).map((row:{[key:string]:any}) => row[this.parameter]),
-                        locations: this.datamanger.GetYear(i).map((row:{[key:string]:any})=> row["country"]),
-                    }],
-                });
-            }
-            return frames as plotly.Frame[];
+        Animate(): void{
+             plotly.animate(
+                this.id,
+                [this.currentYear -1, this.currentYear],
+                {
+            frame: [
+                   {duration: 200},
+                   {duration: 200},
+                 ],
+                 transition: [
+                   {duration: 100, easing: 'elastic-in'},
+                   {duration: 100, easing: 'cubic-in'},
+                 ],
+                 mode:'afterall'
+                }
+             );
         },
 
-        Animate(): void{
-             plotly.animate(this.id, {
-                data: this.BuildLocableData(this.currentYear),
-                traces: [0],
-                layout: this.DrawLayout(this.currentYear),
-              }, {
-                transition: {
-                  duration: 500,
-                  easing: 'cubic-in-out'
-                },
-                frame: {
-                  duration: 500
-                }
-              });
+        GenerateFrames():Partial<plotly.Frame>[]{
+            var frames : Array<Partial<plotly.Frame>> = new Array<Partial<plotly.Frame>>();
+            for(var i = this.startYear; i <= this.endYear; i++){
+                frames.push({
+                    name: i,
+                    data:this.BuildLocableData(i)
+                });
+            }
+
+            return frames;
         },
 
         Draw() : void{
-            plotly.newPlot(this.id,this.BuildLocableData(this.currentYear) , this.DrawLayout(this.currentYear));
+            plotly.newPlot(this.id,this.BuildLocableData(this.currentYear) , this.DrawLayout(this.currentYear)).then(()=>{
+                plotly.addFrames(this.id,this.GenerateFrames());
+            })
         }
     }
 });

@@ -1,7 +1,7 @@
 <template>
 <div>
     <p>Map Loaded</p>
-<div class="MapContainer" v-bind:id="id" >
+<div  class="MapContainer" v-bind:id="id" >
 </div>
 </div>
 </template>
@@ -45,6 +45,9 @@ export default defineComponent({
             }
         },
 
+        Show(data : any){
+            console.log(data.points[0].location);
+        },
 
         DrawLayout(year:number) : Partial<plotly.Layout> {
             var layout = {
@@ -52,7 +55,7 @@ export default defineComponent({
                 geo:{
                     projection:{
                         type: this.projectionType,
-                        location: this.datamanger.GetYear(year).map((row: {[key:string]:any}) => row["country"]),
+                        
                     }
                 }
 
@@ -61,13 +64,13 @@ export default defineComponent({
         },
 
         BuildLocableData(year: number): plotly.Data[]{
-
            var data : Partial<plotly.Data[]> = [{
                 type:  "choropleth",
-                locationmode: "country names",
-                locations : this.datamanger.GetYear(year).map((row:{[key:string]:any})=> row["country"]),
+                locationmode: "ISO-3",
+                locations : this.datamanger.GetYear(year).map((row:{[key:string]:any})=> row["iso_code"]),
                 z: this.datamanger.GetYear(year).map((row:{[key:string]:any})=> row[this.parameter]),
-                zmax:100,
+                zsmooth: "best",
+                zmax: d3.max(this.datamanger.GetYear(year).map((row:{[key:string]:any})=> row[this.parameter]))
              }];
              return data as plotly.Data[];
         },
@@ -75,17 +78,14 @@ export default defineComponent({
         Animate(): void{
              plotly.animate(
                 this.id,
-                [this.currentYear -1, this.currentYear],
+                [this.currentYear],
                 {
             frame: [
-                   {duration: 200},
-                   {duration: 200},
+                   {duration: 0},
                  ],
                  transition: [
                    {duration: 100, easing: 'elastic-in'},
-                   {duration: 100, easing: 'cubic-in'},
                  ],
-                 mode:'afterall'
                 }
              );
         },
@@ -105,9 +105,22 @@ export default defineComponent({
         Draw() : void{
             plotly.newPlot(this.id,this.BuildLocableData(this.currentYear) , this.DrawLayout(this.currentYear)).then(()=>{
                 plotly.addFrames(this.id,this.GenerateFrames());
-            })
+                
+            });
+
+            var plot = document.getElementById(this.id);
+            (plot as any)?.on('plotly_click',(data : plotly.PlotMouseEvent)=> this.Show(data));
+
+        }
+    },
+
+    watch:{
+        parameter(oldval,newval){
+            if(oldval != newval) this.Draw();
         }
     }
+
+
 });
 
 

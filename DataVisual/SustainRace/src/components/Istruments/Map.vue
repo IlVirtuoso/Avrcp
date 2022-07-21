@@ -1,6 +1,5 @@
 <template>
 <div>
-    <p>Map Loaded</p>
 <div  class="MapContainer" v-bind:id="id" >
 </div>
 </div>
@@ -51,11 +50,14 @@ export default defineComponent({
 
         DrawLayout(year:number) : Partial<plotly.Layout> {
             var layout = {
-                title: this.title,
+                title: this.parameter.label + " " + this.parameter.unit,
                 geo:{
                     projection:{
                         type: this.projectionType,
                         
+                    },
+                    mapbox:{
+                        style:"dark"
                     }
                 }
 
@@ -68,10 +70,13 @@ export default defineComponent({
                 type:  "choropleth",
                 locationmode: "ISO-3",
                 locations : this.datamanger.GetYear(year).map((row:{[key:string]:any})=> row["iso_code"]),
-                z: this.datamanger.GetYear(year).map((row:{[key:string]:any})=> row[this.parameter]),
-                zsmooth: "best",
-                zmax: d3.max(this.datamanger.GetYear(year).map((row:{[key:string]:any})=> row[this.parameter]))
-             }];
+                z: this.datamanger.GetYear(year).map((row:{[key:string]:any})=> row[this.parameter.value]),
+                colorbar:{
+                    title:this.parameter.unit,
+                },
+                colorscale:this.parameter.color,
+               // zmax: d3.max(this.datamanger.GetYear(year).map((row:{[key:string]:any})=> row[this.parameter.value]))
+             }]; 
              return data as plotly.Data[];
         },
 
@@ -109,13 +114,17 @@ export default defineComponent({
             });
 
             var plot = document.getElementById(this.id);
-            (plot as any)?.on('plotly_click',(data : plotly.PlotMouseEvent)=> this.Show(data));
-
+            (plot as any)?.on('plotly_click',(data : any)=> 
+            this.$emit('location_clicked', data.points[0].location));
+            
         }
     },
-
+    emits:['location_clicked'],
     watch:{
         parameter(oldval,newval){
+            if(oldval != newval) this.Draw();
+        },
+        projectionType(oldval,newval){
             if(oldval != newval) this.Draw();
         }
     }

@@ -6,7 +6,6 @@ import Composer from './components/Composer.vue';
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
   <Composer />
 </template>
 

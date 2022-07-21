@@ -13,6 +13,7 @@ import * as d3 from "d3";
 import * as plotly from "plotly.js-dist-min"
 import DataManager from "../Support/DataManager";
 import { fileURLToPath } from "url";
+import { Color } from "csstype";
 
 
 export default defineComponent({
@@ -25,13 +26,7 @@ export default defineComponent({
 
     updated(){
         this.datamanager = this.dataIn;
-        if(!this.loaded){
         this.Draw();
-        this.loaded = true;
-        }
-        else{
-            this.Animate();
-        }
     },
 
     methods:{
@@ -39,26 +34,32 @@ export default defineComponent({
 
         CreateTraces(): plotly.Data[]{
             var data : Array<Partial<plotly.Data>> = new Array<Partial<plotly.Data>>()
-            var params :Array<string> = this.parameters;
+            var params :Array<{label:string, value:string, color:plotly.Color}> = this.parameters;
             params.forEach((param) =>{
                 var years: Array<number> = new Array<number>();
                 var values: Array<number> = new Array<number>();
-                this.datamanager.GetCountry(this.country).map((row)=>{
+                this.datamanager.GetIso(this.country).map((row)=>{
                     years.push(parseInt(row["year"] as unknown as string));
-                    values.push(parseFloat(row[param] as any as string));
+                    values.push(parseFloat(row[param.value] as any as string));
                 });
                 data.push({
                     x:years,
                     y:values,
                     type:"histogram",
                     histfunc:"sum",
-                    name:param,
+                    name:param.label,
+                    text:param.label,
+                    textinfo:"value",
+                    marker:{
+                        color:param.color
+                    },
                     autobinx:false,
                      xbins: {
                       end: parseInt(this.endYear), 
                       size: 0.5, 
                       start: parseInt(this.startYear),
-                    }
+                    },
+                    
                 })
             });
 

@@ -1,0 +1,14 @@
+#pragma once
+#include "GraphAnalyzer.hpp"
+#include "Centralities.hpp"
+#include "Communities.hpp"
+#include "Components.hpp"
+#include <future>
+#include <filesystem>
+#include <networkit/io/EdgeListReader.hpp>
+#include <QApplication>
+#include <QMainWindow>
+#include <networkit/centrality/DegreeCentrality.hpp>
+#include <networkit/io/DotGraphWriter.hpp>
+#include <QFileDialog>
+#include <networkit/community/PLM.hpp>

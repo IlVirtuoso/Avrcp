@@ -1,0 +1,16 @@
+{
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/out/build/x64-Debug"
+    ],
+    "files.associations": {
+        "algorithm": "cpp",
+        "barrier": "cpp",
+        "chrono": "cpp",
+        "latch": "cpp",
+        "limits": "cpp",
+        "random": "cpp",
+        "semaphore": "cpp",
+        "utility": "cpp",
+        "valarray": "cpp"
+    }
+}
